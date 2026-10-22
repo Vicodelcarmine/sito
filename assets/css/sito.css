@@ -182,11 +182,12 @@ p{ margin:0; }
 .piatto h3{ font-size:1.25rem; }
 .piatto p{ color:var(--tenue); font-size:.9rem; line-height:1.55; margin-top:6px; }
 @media (min-width:1000px){
+  /* quattro per riga; se l'ultima riga è incompleta resta al centro */
   .fila{
-    grid-auto-flow:row; grid-template-columns:repeat(4, 1fr); overflow:visible;
+    display:flex; flex-wrap:wrap; justify-content:center; overflow:visible;
     max-width:calc(var(--larghezza) + 2*var(--margine)); margin:0 auto; gap:22px;
   }
-  .piatto{ transition:transform .3s, border-color .3s; }
+  .piatto{ flex:0 0 calc((100% - 3*22px) / 4); transition:transform .3s, border-color .3s; }
   .piatto:hover{ transform:translateY(-4px); border-color:rgba(230,178,74,.4); }
 }
 
