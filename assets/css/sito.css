@@ -166,28 +166,32 @@ p{ margin:0; }
 }
 .link-freccia .ico{ transition:transform .2s; }
 .link-freccia:hover .ico{ transform:translateX(4px); }
-.fila{
-  display:grid; grid-auto-flow:column; grid-auto-columns:min(74%, 280px); gap:16px;
-  overflow-x:auto; scroll-snap-type:x mandatory; overscroll-behavior-x:contain;
-  padding:4px var(--margine) 18px; scroll-padding:0 var(--margine);
-  scrollbar-width:none;
+/* tre gruppi (pizze, primi, secondi) da due piatti: tutto a colpo d'occhio, niente da scorrere di lato */
+.gruppi{ display:grid; gap:34px; }
+.gruppo-titolo{
+  display:flex; align-items:center; gap:14px; margin-bottom:14px;
+  font-size:1.05rem; text-transform:uppercase; letter-spacing:.16em; color:var(--oro-tenue);
 }
-.fila::-webkit-scrollbar{ display:none; }
+.gruppo-titolo::after{ content:""; flex:1; height:1px; background:var(--linea); }
+.coppia{ display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:640px; }
 .piatto{
-  scroll-snap-align:start; background:var(--carta); border:1px solid var(--linea);
-  border-radius:18px; overflow:hidden; display:flex; flex-direction:column;
+  background:var(--carta); border:1px solid var(--linea);
+  border-radius:16px; overflow:hidden; display:flex; flex-direction:column;
 }
 .piatto img{ width:100%; aspect-ratio:4/5; object-fit:cover; }
-.piatto div{ padding:16px 18px 20px; }
-.piatto h3{ font-size:1.25rem; }
-.piatto p{ color:var(--tenue); font-size:.9rem; line-height:1.55; margin-top:6px; }
+.piatto div{ padding:12px 12px 14px; }
+.piatto h4{ font-family:var(--f-titoli); font-weight:500; font-size:1.05rem; line-height:1.15; margin:0; }
+.piatto p{ color:var(--tenue); font-size:.8rem; line-height:1.45; margin-top:5px; }
+@media (min-width:600px){
+  .piatto div{ padding:16px 16px 18px; }
+  .piatto h4{ font-size:1.2rem; }
+  .piatto p{ font-size:.88rem; }
+}
 @media (min-width:1000px){
-  /* quattro per riga; se l'ultima riga è incompleta resta al centro */
-  .fila{
-    display:flex; flex-wrap:wrap; justify-content:center; overflow:visible;
-    max-width:calc(var(--larghezza) + 2*var(--margine)); margin:0 auto; gap:22px;
-  }
-  .piatto{ flex:0 0 calc((100% - 3*22px) / 4); transition:transform .3s, border-color .3s; }
+  /* su computer i tre gruppi stanno uno accanto all'altro: sei piatti in una riga */
+  .gruppi{ grid-template-columns:repeat(3, 1fr); gap:28px; }
+  .coppia{ gap:14px; }
+  .piatto{ transition:transform .3s, border-color .3s; }
   .piatto:hover{ transform:translateY(-4px); border-color:rgba(230,178,74,.4); }
 }
 

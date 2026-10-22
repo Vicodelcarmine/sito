@@ -40,18 +40,20 @@
 
   "foto_ventaglio": ["chitarra-scoglio", "pizza-vico", "entrecote-chianti"],
 
+  "_specialita": "Tre gruppi (pizze, primi, secondi), due piatti ciascuno: chi guarda di fretta capisce subito che non facciamo solo pizza. titolo = chiave in testi.json.",
   "specialita": [
-    {"foto": "pizza-vico", "nome": "Pizza Vico", "it": "Pomodoro, mozzarella, salsiccia, friarielli, salame Napoli e ricotta", "en": "Tomato, mozzarella, sausage, friarielli, Napoli salami and ricotta"},
-    {"foto": "chitarra-scoglio", "nome": "Chitarrina allo scoglio", "it": "Cozze, vongole, calamari, canocchie e gamberetti", "en": "Mussels, clams, squid, mantis shrimp and prawns"},
-    {"foto": "entrecote-chianti", "nome": "Entrecôte al Chianti", "it": "Controfiletto di manzo al vino Chianti", "en": "Beef sirloin cooked in Chianti wine"},
-    {"foto": "pizza-tabarro", "nome": "Pizza Tabarro", "it": "Pomodorini ciliegino, cipolla rossa, 'nduja, burrata e basilico", "en": "Cherry tomatoes, red onion, 'nduja, burrata and basil"},
-    {"foto": "carbonara-mare", "nome": "Chitarrina alla carbonara di mare", "it": "Cozze, vongole, calamari e gamberetti, uovo e pepe nero", "en": "Mussels, clams, squid and prawns, egg and black pepper"},
-    {"foto": "pizza-toscana", "nome": "Pizza Toscana", "it": "Mozzarella, crema di tartufo, salame toscano, burrata e basilico", "en": "Mozzarella, truffle cream, Tuscan salami, burrata and basil"},
-    {"foto": "branzino-griglia", "nome": "Branzino alla griglia", "it": "Spigola o orata, cotta alla griglia", "en": "Sea bass or sea bream, cooked on the grill"},
-    {"foto": "gnocchi-sorrentina", "nome": "Gnocchi alla sorrentina", "it": "Gnocchi di patate, pomodoro, basilico e mozzarella", "en": "Potato gnocchi, tomato, basil and mozzarella"},
-    {"foto": "tagliata-manzo", "nome": "Tagliata di manzo", "it": "Controfiletto di manzo ai ferri, tagliato al momento", "en": "Grilled beef sirloin, sliced to order"},
-    {"foto": "pizza-nereto", "nome": "Pizza Nereto", "it": "Crema di zucchine, fior di latte, scamorza, guanciale e cipolle rosse", "en": "Zucchini cream, fior di latte, scamorza, guanciale and red onions"},
-    {"foto": "margherita", "nome": "Margherita", "it": "Pomodoro, mozzarella e basilico: la regina di Napoli", "en": "Tomato, mozzarella and basil: the queen of Naples"}
+    { "titolo": "spec_pizze", "piatti": [
+        {"foto": "pizza-vico", "nome": "Pizza Vico", "it": "Pomodoro, mozzarella, salsiccia, friarielli, salame Napoli e ricotta", "en": "Tomato, mozzarella, sausage, friarielli, Napoli salami and ricotta"},
+        {"foto": "pizza-tabarro", "nome": "Pizza Tabarro", "it": "Pomodorini ciliegino, cipolla rossa, 'nduja, burrata e basilico", "en": "Cherry tomatoes, red onion, 'nduja, burrata and basil"}
+    ] },
+    { "titolo": "spec_primi", "piatti": [
+        {"foto": "chitarra-scoglio", "nome": "Chitarrina allo scoglio", "it": "Cozze, vongole, calamari, canocchie e gamberetti", "en": "Mussels, clams, squid, mantis shrimp and prawns"},
+        {"foto": "carbonara-mare", "nome": "Chitarrina alla carbonara di mare", "it": "Cozze, vongole, calamari e gamberetti, uovo e pepe nero", "en": "Mussels, clams, squid and prawns, egg and black pepper"}
+    ] },
+    { "titolo": "spec_secondi", "piatti": [
+        {"foto": "branzino-griglia", "nome": "Branzino alla griglia", "it": "Spigola o orata, cotta alla griglia", "en": "Sea bass or sea bream, cooked on the grill"},
+        {"foto": "entrecote-chianti", "nome": "Entrecôte al Chianti", "it": "Controfiletto di manzo al vino Chianti", "en": "Beef sirloin cooked in Chianti wine"}
+    ] }
   ],
 
   "vicolo": {

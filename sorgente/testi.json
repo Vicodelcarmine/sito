@@ -36,6 +36,9 @@
     "spec_occhiello": "Dal nostro menu",
     "spec_titolo": "Le specialità",
     "spec_tutto": "Sfoglia tutto il menu",
+    "spec_pizze": "Le pizze",
+    "spec_primi": "I primi",
+    "spec_secondi": "I secondi",
 
     "pren_occhiello": "Prenotazioni",
     "pren_titolo": "Prenota il tuo tavolo",
@@ -105,6 +108,9 @@
     "spec_occhiello": "From our menu",
     "spec_titolo": "Specialties",
     "spec_tutto": "Browse the full menu",
+    "spec_pizze": "Pizza",
+    "spec_primi": "Pasta",
+    "spec_secondi": "Mains",
 
     "pren_occhiello": "Reservations",
     "pren_titolo": "Book your table",

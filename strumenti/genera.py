@@ -88,11 +88,14 @@ def costruisci(d, t, lingua):
         '<img class="carta c%d" src="%sassets/img/piatti/%s.jpg" alt="" width="720" height="900">' % (i + 1, base, f)
         for i, f in enumerate(d["foto_ventaglio"][:3]))
 
+    def piatto(p):
+        return ('<article class="piatto"><img src="%sassets/img/piatti/%s.jpg" alt="%s" width="720" height="900" loading="lazy">'
+                '<div><h4>%s</h4><p>%s</p></div></article>'
+                % (base, p["foto"], esc(p["nome"]), esc(p["nome"]), esc(p.get(lingua) or p.get("it", ""))))
     v["SPECIALITA"] = "".join(
-        '<article class="piatto"><img src="%sassets/img/piatti/%s.jpg" alt="%s" width="720" height="900" loading="lazy">'
-        '<div><h3>%s</h3><p>%s</p></div></article>'
-        % (base, p["foto"], esc(p["nome"]), esc(p["nome"]), esc(p.get(lingua) or p.get("it", "")))
-        for p in d["specialita"])
+        '<div class="gruppo"><h3 class="gruppo-titolo">%s</h3><div class="coppia">%s</div></div>'
+        % (esc(t[g["titolo"]]), "".join(piatto(p) for p in g["piatti"]))
+        for g in d["specialita"])
 
     righe = []
     for g in ORDINE_GIORNI:
