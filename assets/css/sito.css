@@ -278,3 +278,4 @@ p{ margin:0; }
   .carta,.stato.aperto .pallino{ animation:none; }
   .btn,.carta,.piatto{ transition:none; }
 }
+.credito{ margin-top:4px !important; }

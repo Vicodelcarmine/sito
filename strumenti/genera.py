@@ -72,6 +72,7 @@ def costruisci(d, t, lingua):
         "INDIRIZZO": esc(d["indirizzo"]), "CAP": esc(d["cap"]), "CITTA": esc(d["citta"]),
         "ANNO": str(d["anno"]),
         "PIVA": (" · " + esc(t["piede_piva"]) + " " + esc(d["partita_iva"])) if d.get("partita_iva") else "",
+        "CREDITO": "",
         "V_FONT": impronta("assets/css/font.css"), "V_CSS": impronta("assets/css/sito.css"),
         "V_JS": impronta("assets/js/sito.js"),
     })
@@ -112,6 +113,15 @@ def costruisci(d, t, lingua):
             social.append('<a href="%s" target="_blank" rel="noopener" aria-label="%s">%s</a>'
                           % (esc(link), rete.capitalize(), ICONE[rete]))
     v["SOCIAL"] = "".join(social)
+
+    cr = d.get("credito") or {}
+    if cr.get("nome"):
+        chi = ('<a href="%s" target="_blank" rel="noopener">%s</a>' % (esc(cr["url"]), esc(cr["nome"]))
+               if cr.get("url") else esc(cr["nome"]))
+        v["CREDITO"] = '<p class="piccolo credito">%s %s%s%s</p>' % (
+            esc(t["piede_credito"]), chi,
+            (" · " + esc(cr["ditta"])) if cr.get("ditta") else "",
+            (" · " + esc(t["piede_piva"]) + " " + esc(cr["partita_iva"])) if cr.get("partita_iva") else "")
 
     vic = d.get("vicolo") or {}
     v["VICOLO"] = ""
