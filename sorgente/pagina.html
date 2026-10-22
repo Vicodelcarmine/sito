@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="{{LANG}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{{meta_titolo}}</title>
+  <meta name="description" content="{{meta_descrizione}}">
+  <link rel="canonical" href="{{CANONICO}}">
+  <link rel="alternate" hreflang="it" href="{{URL_IT}}">
+  <link rel="alternate" hreflang="en" href="{{URL_EN}}">
+  <link rel="alternate" hreflang="x-default" href="{{URL_IT}}">
+  <meta property="og:type" content="restaurant">
+  <meta property="og:site_name" content="{{NOME}}">
+  <meta property="og:title" content="{{meta_titolo}}">
+  <meta property="og:description" content="{{meta_descrizione}}">
+  <meta property="og:url" content="{{CANONICO}}">
+  <meta property="og:image" content="{{URL_IT}}assets/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="{{OG_LOCALE}}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#1a1210">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{BASE}}assets/img/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="{{BASE}}assets/img/favicon-64.png">
+  <link rel="apple-touch-icon" href="{{BASE}}assets/img/apple-touch-icon.png">
+  <link rel="preload" href="{{BASE}}assets/fonts/oswald.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{BASE}}assets/css/font.css?v={{V_FONT}}">
+  <link rel="stylesheet" href="{{BASE}}assets/css/sito.css?v={{V_CSS}}">
+  <script type="application/ld+json">{{JSONLD}}</script>
+</head>
+<body>
+
+<header class="testa" id="testa">
+  <a class="marchio" href="./" aria-label="{{NOME}}">
+    <img src="{{BASE}}assets/img/mascotte-240.png" alt="" width="172" height="240">
+    <span>{{NOME}}</span>
+  </a>
+  <nav class="nav" aria-label="{{NOME}}">
+    <a href="#specialita">{{nav_specialita}}</a>
+    <a href="#club">{{nav_club}}</a>
+    <a href="#dove">{{nav_dove}}</a>
+  </nav>
+  <div class="testa-dx">
+    <a class="lingua" href="{{ALTRA_URL}}" hreflang="{{ALTRA_LANG}}" lang="{{ALTRA_LANG}}" title="{{altra_lingua}}">{{ALTRA_SIGLA}}</a>
+    <a class="btn btn-piccolo" href="#prenota">{{prenota}}</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="contenitore hero-griglia">
+      <div class="hero-testo">
+        <p class="occhiello">{{hero_occhiello}}</p>
+        <h1>{{hero_titolo_html}}</h1>
+        <p class="lead">{{hero_testo}}</p>
+        <div class="azioni">
+          <a class="btn" href="#prenota">{{I_calendario}}{{prenota_tavolo}}</a>
+          <a class="btn btn-vuoto" href="{{MENU}}">{{I_libro}}{{sfoglia_menu}}</a>
+        </div>
+        <p class="stato" id="stato" hidden><span class="pallino"></span><span id="stato-testo"></span></p>
+      </div>
+      <div class="ventaglio" aria-hidden="true">{{VENTAGLIO}}</div>
+    </div>
+  </section>
+
+  <section class="sezione locale" id="locale">
+    <div class="contenitore due">
+      <div>
+        <p class="occhiello">{{locale_occhiello}}</p>
+        <h2>{{locale_titolo_html}}</h2>
+        <p class="testo">{{locale_testo}}</p>
+      </div>
+      <ul class="punti">
+        <li><span class="icona">{{I_pizza}}</span><div><h3>{{punto1_titolo}}</h3><p>{{punto1_testo}}</p></div></li>
+        <li><span class="icona">{{I_pesce}}</span><div><h3>{{punto2_titolo}}</h3><p>{{punto2_testo}}</p></div></li>
+        <li><span class="icona">{{I_mondo}}</span><div><h3>{{punto3_titolo}}</h3><p>{{punto3_testo}}</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sezione" id="specialita">
+    <div class="contenitore intesta">
+      <div>
+        <p class="occhiello">{{spec_occhiello}}</p>
+        <h2>{{spec_titolo}}</h2>
+      </div>
+      <a class="link-freccia" href="{{MENU}}">{{spec_tutto}}{{I_freccia}}</a>
+    </div>
+    <div class="fila">{{SPECIALITA}}</div>
+  </section>
+
+  <section class="sezione prenota" id="prenota">
+    <div class="contenitore">
+      <div class="riquadro">
+        <p class="occhiello">{{pren_occhiello}}</p>
+        <h2>{{pren_titolo}}</h2>
+        <p class="testo">{{pren_testo}}</p>
+        <div class="azioni">
+          <a class="btn btn-chiaro" href="tel:{{TEL}}">{{I_telefono}}{{CHIAMA}}</a>
+          {{WHATSAPP}}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sezione club" id="club">
+    <div class="contenitore club-griglia">
+      <img class="club-mascotte" src="{{BASE}}assets/img/mascotte.png" alt="" width="348" height="486" loading="lazy">
+      <div>
+        <p class="occhiello">{{club_occhiello}}</p>
+        <h2>{{club_titolo_html}}</h2>
+        <p class="testo">{{club_testo}}</p>
+        <p class="come">{{I_regalo}}<span>{{club_come}}</span></p>
+        <a class="btn" href="{{MENU}}">{{I_libro}}{{club_bottone}}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sezione dove" id="dove">
+    <div class="contenitore due">
+      <div>
+        <p class="occhiello">{{dove_occhiello}}</p>
+        <h2>{{INDIRIZZO}}<br><span class="citta">{{CAP}} {{CITTA}}</span></h2>
+        <p class="testo">{{dove_testo}}</p>
+        <div class="azioni">
+          <a class="btn" href="{{MAPPA}}" target="_blank" rel="noopener">{{I_luogo}}{{indicazioni}}</a>
+          <a class="btn btn-vuoto" href="tel:{{TEL}}">{{I_telefono}}{{TEL_VISTO}}</a>
+        </div>
+      </div>
+      <div class="orari">
+        <h3>{{I_orologio}}{{orari}}</h3>
+        <table>{{ORARI_RIGHE}}</table>
+      </div>
+    </div>
+  </section>
+
+  {{VICOLO}}
+
+</main>
+
+<footer class="piede">
+  <div class="contenitore">
+    <img src="{{BASE}}assets/img/mascotte-240.png" alt="" width="58" height="81" loading="lazy">
+    <p class="piede-nome">{{NOME}}</p>
+    <p class="piede-motto">{{piede_motto}}</p>
+    <p>{{INDIRIZZO}}, {{CAP}} {{CITTA}} · <a href="tel:{{TEL}}">{{TEL_VISTO}}</a></p>
+    <p class="social">{{SOCIAL}}</p>
+    <p><a href="{{MENU}}">{{piede_menu}}</a> · <a href="{{ALTRA_URL}}" hreflang="{{ALTRA_LANG}}" lang="{{ALTRA_LANG}}">{{altra_lingua}}</a></p>
+    <p class="piccolo">© {{ANNO}} {{NOME}}{{PIVA}}</p>
+  </div>
+</footer>
+
+<nav class="barra" aria-label="{{NOME}}">
+  <a href="{{MENU}}">{{I_libro}}<span>{{barra_menu}}</span></a>
+  <a href="{{MAPPA}}" target="_blank" rel="noopener">{{I_luogo}}<span>{{barra_strada}}</span></a>
+  <a class="primo" href="#prenota">{{I_calendario}}<span>{{barra_prenota}}</span></a>
+</nav>
+
+<script>window.SITO = {{SITO_JSON}};</script>
+<script src="{{BASE}}assets/js/sito.js?v={{V_JS}}" defer></script>
+</body>
+</html>

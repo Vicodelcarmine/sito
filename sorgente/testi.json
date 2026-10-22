@@ -1,0 +1,141 @@
+{
+  "_nota": "TESTI DEL SITO, una sezione per lingua. Le chiavi che finiscono in _html possono contenere <em> e <br>. {tel}, {ora}, {giorno} si riempiono da soli.",
+
+  "it": {
+    "lingua_nome": "Italiano",
+    "meta_titolo": "Vico del Carmine · Osteria pizzeria napoletana a Firenze, San Frediano",
+    "meta_descrizione": "Pizza napoletana, pasta di mare e cucina della tradizione in Via Pisana 40/r, a due passi da Porta San Frediano. Sfoglia il menu in 9 lingue e prenota il tuo tavolo.",
+
+    "nav_specialita": "Specialità",
+    "nav_club": "Club",
+    "nav_dove": "Dove siamo",
+    "prenota": "Prenota",
+
+    "hero_occhiello": "Osteria pizzeria napoletana · Firenze",
+    "hero_titolo_html": "Un vicolo di Napoli<br><em>a San Frediano</em>",
+    "hero_testo": "Pizza napoletana, pasta di mare e i piatti della tradizione, in Via Pisana a due passi da Porta San Frediano.",
+    "prenota_tavolo": "Prenota un tavolo",
+    "sfoglia_menu": "Sfoglia il menu",
+
+    "stato_aperto": "Aperto ora · fino alle {ora}",
+    "stato_apre_oggi": "Oggi apriamo alle {ora}",
+    "stato_apre": "Riapriamo {giorno} alle {ora}",
+    "stato_chiuso": "Oggi siamo chiusi",
+    "domani": "domani",
+
+    "locale_occhiello": "Il locale",
+    "locale_titolo_html": "A Napoli il vicolo<br>si chiama <em>vico</em>",
+    "locale_testo": "Il Vico del Carmine è un pezzo di Napoli in Oltrarno: un'osteria pizzeria dove si mangia come a casa, tra pizze napoletane, primi di mare, grigliate e dolci della tradizione. Una cucina semplice e generosa, da dividere al tavolo.",
+    "punto1_titolo": "La pizza napoletana",
+    "punto1_testo": "Le classiche e le pizze del Vico, anche con impasti speciali.",
+    "punto2_titolo": "Mare e terra",
+    "punto2_testo": "Chitarrina allo scoglio, gnocchi alla sorrentina, tagliata e grigliate.",
+    "punto3_titolo": "Il menu in 9 lingue",
+    "punto3_testo": "Si sfoglia dal telefono come un libro. Al tavolo puoi anche ordinare.",
+
+    "spec_occhiello": "Dal nostro menu",
+    "spec_titolo": "Le specialità",
+    "spec_tutto": "Sfoglia tutto il menu",
+
+    "pren_occhiello": "Prenotazioni",
+    "pren_titolo": "Prenota il tuo tavolo",
+    "pren_testo": "Chiamaci e ti teniamo il tavolo. Per i gruppi è meglio avvisarci qualche giorno prima.",
+    "chiama": "Chiama {tel}",
+    "whatsapp": "Scrivici su WhatsApp",
+
+    "club_occhiello": "Club del Vico",
+    "club_titolo_html": "Entra nel Club:<br><em>la prossima volta offriamo noi</em>",
+    "club_testo": "Iscriversi è gratis. Alla tua prossima visita ti aspetta un omaggio, e per il compleanno un regalo da festeggiare con gli amici.",
+    "club_come": "Apri il menu e tocca il regalo 🎁 in alto a sinistra.",
+    "club_bottone": "Apri il menu",
+
+    "dove_occhiello": "Dove siamo",
+    "dove_testo": "Appena fuori Porta San Frediano, in Oltrarno.",
+    "indicazioni": "Indicazioni",
+    "orari": "Orari",
+    "telefono": "Telefono",
+    "chiuso": "Chiuso",
+    "giorni": ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"],
+
+    "vicolo_occhiello": "Dagli stessi titolari",
+    "vicolo_titolo_html": "Ti piace la brace? Vieni a trovarci anche al <em>Vicolo</em>",
+    "vicolo_testo": "La nostra braceria pizzeria: carne alla brace e pizza cotta a legna.",
+
+    "piede_motto": "Osteria pizzeria napoletana",
+    "piede_menu": "Menu digitale",
+    "piede_piva": "P.IVA",
+    "barra_menu": "Menu",
+    "barra_strada": "Indicazioni",
+    "barra_prenota": "Prenota",
+    "altra_lingua": "English"
+  },
+
+  "en": {
+    "lingua_nome": "English",
+    "meta_titolo": "Vico del Carmine · Neapolitan pizzeria and trattoria in Florence, San Frediano",
+    "meta_descrizione": "Neapolitan pizza, seafood pasta and traditional dishes at Via Pisana 40/r, a short walk from Porta San Frediano in Florence. Browse the menu in 9 languages and book your table.",
+
+    "nav_specialita": "Specialties",
+    "nav_club": "Club",
+    "nav_dove": "Find us",
+    "prenota": "Book",
+
+    "hero_occhiello": "Neapolitan pizzeria & trattoria · Florence",
+    "hero_titolo_html": "A Naples alley<br><em>in San Frediano</em>",
+    "hero_testo": "Neapolitan pizza, seafood pasta and traditional dishes, on Via Pisana, a short walk from Porta San Frediano.",
+    "prenota_tavolo": "Book a table",
+    "sfoglia_menu": "Browse the menu",
+
+    "stato_aperto": "Open now · until {ora}",
+    "stato_apre_oggi": "Today we open at {ora}",
+    "stato_apre": "We reopen {giorno} at {ora}",
+    "stato_chiuso": "Closed today",
+    "domani": "tomorrow",
+
+    "locale_occhiello": "The place",
+    "locale_titolo_html": "In Naples an alley<br>is called a <em>vico</em>",
+    "locale_testo": "Vico del Carmine is a piece of Naples in the Oltrarno: a trattoria and pizzeria where you eat like at home, with Neapolitan pizzas, seafood pasta, grilled meat and traditional desserts. Simple, generous food, made for sharing.",
+    "punto1_titolo": "Neapolitan pizza",
+    "punto1_testo": "The classics and our own Vico pizzas, also with special doughs.",
+    "punto2_titolo": "Sea and land",
+    "punto2_testo": "Seafood chitarrina, gnocchi alla sorrentina, sliced steak and grills.",
+    "punto3_titolo": "The menu in 9 languages",
+    "punto3_testo": "Flip through it on your phone like a book. At the table you can even order.",
+
+    "spec_occhiello": "From our menu",
+    "spec_titolo": "Specialties",
+    "spec_tutto": "Browse the full menu",
+
+    "pren_occhiello": "Reservations",
+    "pren_titolo": "Book your table",
+    "pren_testo": "Give us a call and we will keep a table for you. For groups, please let us know a few days ahead.",
+    "chiama": "Call {tel}",
+    "whatsapp": "Message us on WhatsApp",
+
+    "club_occhiello": "Club del Vico",
+    "club_titolo_html": "Join the Club:<br><em>next time it's on us</em>",
+    "club_testo": "Joining is free. A treat waits for you on your next visit, and a birthday gift to celebrate with your friends.",
+    "club_come": "Open the menu and tap the gift 🎁 at the top left.",
+    "club_bottone": "Open the menu",
+
+    "dove_occhiello": "Find us",
+    "dove_testo": "Just outside Porta San Frediano, in the Oltrarno.",
+    "indicazioni": "Directions",
+    "orari": "Opening hours",
+    "telefono": "Phone",
+    "chiuso": "Closed",
+    "giorni": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+
+    "vicolo_occhiello": "From the same owners",
+    "vicolo_titolo_html": "Love the grill? Come and see us at <em>Il Vicolo</em> too",
+    "vicolo_testo": "Our steakhouse and pizzeria: meat from the grill and wood-fired pizza.",
+
+    "piede_motto": "Neapolitan pizzeria & trattoria",
+    "piede_menu": "Digital menu",
+    "piede_piva": "VAT",
+    "barra_menu": "Menu",
+    "barra_strada": "Directions",
+    "barra_prenota": "Book",
+    "altra_lingua": "Italiano"
+  }
+}

@@ -1,0 +1,275 @@
+/* ==========================================================================
+   Vico del Carmine — sito
+   Colori e caratteri presi dal menu digitale, così sito e menu sembrano una cosa sola.
+   Per un altro locale si cambiano soprattutto le variabili qui sotto.
+   ========================================================================== */
+:root{
+  --bg:        #1a1210;   /* espresso scuro */
+  --bg-2:      #211714;   /* sezioni alternate */
+  --carta:     #271b17;   /* schede */
+  --carminio:  #c8102e;
+  --brace:     #d13b2f;
+  --vino:      #7a1f2b;
+  --oro:       #e6b24a;
+  --oro-tenue: #edcf94;
+  --basilico:  #86b64a;
+  --crema:     #f7efe2;
+  --tenue:     #cbb49c;
+  --linea:     rgba(230,178,74,.18);
+  --ombra:     0 28px 60px rgba(0,0,0,.5);
+
+  --f-titoli: "Oswald", "Arial Narrow", sans-serif;
+  --f-corsivo: "Playfair Display", Georgia, serif;
+  --f-testo:  "Poppins", system-ui, sans-serif;
+
+  --larghezza: 1120px;
+  --margine: 20px;
+  --testa: 64px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; scroll-padding-top:calc(var(--testa) + 12px); -webkit-text-size-adjust:100%; }
+body{
+  margin:0; background:var(--bg); color:var(--crema);
+  font-family:var(--f-testo); font-size:1rem; line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+img{ max-width:100%; height:auto; display:block; }
+a{ color:inherit; }
+:focus-visible{ outline:2px solid var(--oro); outline-offset:3px; border-radius:6px; }
+h1,h2,h3{ font-family:var(--f-titoli); font-weight:500; line-height:1.08; margin:0; letter-spacing:.005em; }
+h1 em,h2 em{ font-family:var(--f-corsivo); font-style:italic; font-weight:600; color:var(--oro); letter-spacing:0; }
+h2{ font-size:clamp(2rem, 5.2vw, 3.1rem); }
+p{ margin:0; }
+.ico{ width:1.2em; height:1.2em; flex:none; }
+
+.contenitore{ width:100%; max-width:calc(var(--larghezza) + 2*var(--margine)); margin:0 auto; padding:0 var(--margine); }
+.due{ display:grid; gap:40px; }
+@media (min-width:880px){ .due{ grid-template-columns:1fr 1fr; gap:64px; align-items:center; } }
+
+.occhiello{
+  font-family:var(--f-titoli); text-transform:uppercase; letter-spacing:.22em;
+  font-size:.78rem; color:var(--oro); margin-bottom:14px;
+  display:flex; align-items:center; gap:12px;
+}
+.occhiello::before{ content:""; width:28px; height:1px; background:var(--oro); opacity:.7; }
+.testo{ color:rgba(247,239,226,.84); margin-top:18px; max-width:52ch; }
+
+/* ---------- bottoni ---------- */
+.azioni{ display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+.btn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:14px 22px; border-radius:999px; border:1px solid transparent;
+  background:var(--carminio); color:var(--crema); text-decoration:none;
+  font-family:var(--f-titoli); text-transform:uppercase; letter-spacing:.09em; font-size:.92rem; line-height:1;
+  transition:background .2s, border-color .2s, color .2s, transform .2s;
+}
+.btn:hover{ background:var(--brace); transform:translateY(-1px); }
+.btn-vuoto{ background:transparent; border-color:rgba(237,207,148,.45); }
+.btn-vuoto:hover{ background:rgba(237,207,148,.08); border-color:var(--oro-tenue); }
+.btn-chiaro{ background:var(--crema); color:#3a0d14; }
+.btn-chiaro:hover{ background:#fff; }
+.btn-vuoto-chiaro{ background:transparent; border-color:rgba(247,239,226,.55); }
+.btn-vuoto-chiaro:hover{ background:rgba(247,239,226,.1); }
+.btn-piccolo{ padding:10px 16px; font-size:.8rem; }
+
+/* ---------- testata ---------- */
+.testa{
+  position:fixed; inset:0 0 auto; z-index:50; height:var(--testa);
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:0 var(--margine); padding-top:env(safe-area-inset-top);
+  transition:background .3s, border-color .3s, backdrop-filter .3s;
+  border-bottom:1px solid transparent;
+}
+.testa.piena{ background:rgba(26,18,16,.9); border-color:var(--linea); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
+.marchio{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+.marchio img{ height:42px; width:auto; }
+.marchio span{ font-family:var(--f-titoli); font-size:1.2rem; letter-spacing:.02em; white-space:nowrap; }
+.nav{ display:none; gap:30px; }
+.nav a{ text-decoration:none; font-family:var(--f-titoli); text-transform:uppercase; letter-spacing:.14em; font-size:.82rem; color:var(--tenue); transition:color .2s; }
+.nav a:hover{ color:var(--crema); }
+.testa-dx{ display:flex; align-items:center; gap:14px; }
+.lingua{ font-family:var(--f-titoli); letter-spacing:.12em; font-size:.82rem; color:var(--tenue); text-decoration:none; padding:8px 4px; }
+.lingua:hover{ color:var(--crema); }
+@media (min-width:880px){ .nav{ display:flex; } }
+@media (max-width:879px){ .testa-dx .btn-piccolo{ display:none; } }
+
+/* ---------- apertura ---------- */
+.hero{
+  position:relative; overflow:hidden;
+  padding:calc(var(--testa) + 8px) 0 52px;
+  background:
+    radial-gradient(60% 50% at 78% 42%, rgba(200,16,46,.20), transparent 70%),
+    radial-gradient(40% 40% at 12% 90%, rgba(230,178,74,.08), transparent 70%);
+}
+.hero-griglia{ display:grid; gap:20px; }
+.hero h1{ font-size:clamp(2.7rem, 9vw, 5rem); line-height:1.02; }
+.hero h1 em{ display:inline-block; margin-top:.08em; }
+.lead{ font-size:1.08rem; color:rgba(247,239,226,.86); margin-top:20px; max-width:44ch; }
+.stato{
+  display:inline-flex; align-items:center; gap:10px; margin-top:22px;
+  padding:7px 14px; border-radius:999px; border:1px solid var(--linea);
+  font-size:.86rem; color:var(--tenue);
+}
+.pallino{ width:8px; height:8px; border-radius:50%; background:var(--tenue); }
+.stato.aperto{ color:var(--crema); }
+.stato.aperto .pallino{ background:var(--basilico); box-shadow:0 0 0 0 rgba(134,182,74,.6); animation:battito 2s infinite; }
+@keyframes battito{ 70%{ box-shadow:0 0 0 9px rgba(134,182,74,0); } 100%{ box-shadow:0 0 0 0 rgba(134,182,74,0); } }
+
+/* sul telefono il ventaglio sta in cima: la prima cosa che si vede è il cibo */
+.ventaglio{ position:relative; height:clamp(250px, 70vw, 330px); order:-1; margin:-8px 0 6px; }
+.carta{
+  position:absolute; left:50%; bottom:4%;
+  width:min(46%, 300px); aspect-ratio:4/5; object-fit:cover;
+  border-radius:18px; border:1px solid rgba(230,178,74,.35); box-shadow:var(--ombra);
+  transform-origin:50% 120%; transform:translateX(-50%) rotate(var(--r));
+  animation:distribuisci .9s cubic-bezier(.2,.8,.2,1) both; animation-delay:var(--ritardo);
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.c1{ --r:-15deg; --ritardo:.15s; }
+.c2{ --r:0deg;   --ritardo:.3s; z-index:2; }
+.c3{ --r:15deg;  --ritardo:.45s; }
+@keyframes distribuisci{ from{ opacity:0; transform:translateX(-50%) translateY(60px) rotate(0deg); } }
+@media (hover:hover){
+  .ventaglio:hover .c1{ --r:-21deg; }
+  .ventaglio:hover .c3{ --r:21deg; }
+}
+@media (min-width:880px){
+  .hero{ min-height:min(860px, 100svh); display:flex; align-items:center; padding:calc(var(--testa) + 36px) 0 72px; }
+  .hero-griglia{ grid-template-columns:1.2fr .8fr; align-items:center; gap:40px; }
+  .hero h1{ font-size:clamp(3.4rem, 5.2vw, 4.5rem); }
+  .c1{ --r:-18deg; } .c3{ --r:18deg; }
+  .ventaglio{ height:520px; margin:0; order:0; }
+  .carta{ width:min(72%, 320px); }
+}
+
+/* ---------- sezioni ---------- */
+.sezione{ padding:76px 0; }
+@media (min-width:880px){ .sezione{ padding:110px 0; } }
+.locale{ background:var(--bg-2); border-block:1px solid var(--linea); }
+.punti{ list-style:none; margin:0; padding:0; display:grid; gap:26px; }
+.punti li{ display:grid; grid-template-columns:52px 1fr; gap:18px; align-items:start; }
+.icona{
+  width:52px; height:52px; border-radius:50%; display:grid; place-items:center;
+  border:1px solid var(--linea); color:var(--oro); background:rgba(230,178,74,.05);
+}
+.icona .ico{ width:24px; height:24px; }
+.punti h3{ font-size:1.3rem; margin-bottom:4px; }
+.punti p{ color:var(--tenue); font-size:.95rem; line-height:1.6; }
+
+/* ---------- specialità ---------- */
+.intesta{ display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px 28px; margin-bottom:34px; }
+.link-freccia{
+  display:inline-flex; align-items:center; gap:8px; color:var(--oro-tenue); text-decoration:none;
+  font-family:var(--f-titoli); text-transform:uppercase; letter-spacing:.12em; font-size:.85rem;
+  border-bottom:1px solid rgba(237,207,148,.35); padding-bottom:4px;
+}
+.link-freccia .ico{ transition:transform .2s; }
+.link-freccia:hover .ico{ transform:translateX(4px); }
+.fila{
+  display:grid; grid-auto-flow:column; grid-auto-columns:min(74%, 280px); gap:16px;
+  overflow-x:auto; scroll-snap-type:x mandatory; overscroll-behavior-x:contain;
+  padding:4px var(--margine) 18px; scroll-padding:0 var(--margine);
+  scrollbar-width:none;
+}
+.fila::-webkit-scrollbar{ display:none; }
+.piatto{
+  scroll-snap-align:start; background:var(--carta); border:1px solid var(--linea);
+  border-radius:18px; overflow:hidden; display:flex; flex-direction:column;
+}
+.piatto img{ width:100%; aspect-ratio:4/5; object-fit:cover; }
+.piatto div{ padding:16px 18px 20px; }
+.piatto h3{ font-size:1.25rem; }
+.piatto p{ color:var(--tenue); font-size:.9rem; line-height:1.55; margin-top:6px; }
+@media (min-width:1000px){
+  .fila{
+    grid-auto-flow:row; grid-template-columns:repeat(4, 1fr); overflow:visible;
+    max-width:calc(var(--larghezza) + 2*var(--margine)); margin:0 auto; gap:22px;
+  }
+  .piatto{ transition:transform .3s, border-color .3s; }
+  .piatto:hover{ transform:translateY(-4px); border-color:rgba(230,178,74,.4); }
+}
+
+/* ---------- prenota ---------- */
+.prenota .riquadro{
+  position:relative; overflow:hidden; border-radius:26px; padding:44px 26px;
+  background:linear-gradient(135deg, var(--vino) 0%, #4c121b 100%);
+  border:1px solid rgba(237,207,148,.22);
+}
+.prenota .riquadro::after{
+  content:""; position:absolute; right:-80px; top:-80px; width:260px; height:260px; border-radius:50%;
+  background:radial-gradient(circle, rgba(230,178,74,.25), transparent 70%); pointer-events:none;
+}
+.prenota .occhiello{ color:var(--oro-tenue); }
+.prenota .occhiello::before{ background:var(--oro-tenue); }
+@media (min-width:880px){ .prenota .riquadro{ padding:64px 64px; } }
+
+/* ---------- club ---------- */
+.club{ background:var(--bg-2); border-block:1px solid var(--linea); }
+.club-griglia{ display:grid; gap:28px; align-items:center; }
+.club-mascotte{ width:150px; height:auto; filter:drop-shadow(0 20px 30px rgba(0,0,0,.45)); }
+.come{ display:flex; gap:10px; align-items:center; color:var(--oro-tenue); margin-top:18px; font-size:.95rem; }
+.come .ico{ color:var(--oro); }
+@media (min-width:880px){
+  .club-griglia{ grid-template-columns:280px 1fr; gap:64px; }
+  .club-mascotte{ width:240px; justify-self:center; }
+}
+
+/* ---------- dove ---------- */
+.dove h2{ font-size:clamp(2rem, 5vw, 2.8rem); }
+.dove .citta{ font-size:.6em; color:var(--tenue); }
+.orari{ background:var(--carta); border:1px solid var(--linea); border-radius:20px; padding:26px 24px; }
+.orari h3{ display:flex; align-items:center; gap:10px; font-size:1.2rem; text-transform:uppercase; letter-spacing:.12em; color:var(--oro); margin-bottom:12px; }
+.orari table{ width:100%; border-collapse:collapse; }
+.orari th,.orari td{ padding:11px 0; border-bottom:1px solid rgba(230,178,74,.1); font-weight:400; text-align:left; }
+.orari td{ text-align:right; font-variant-numeric:tabular-nums; }
+.orari th{ text-transform:capitalize; color:var(--tenue); }
+.orari tr:last-child th,.orari tr:last-child td{ border-bottom:0; }
+.orari tr.chiuso td{ color:var(--tenue); }
+.orari tr.oggi th,.orari tr.oggi td{ color:var(--crema); font-weight:500; }
+.orari tr.oggi th::after{ content:" •"; color:var(--oro); }
+
+/* ---------- vicolo ---------- */
+.vicolo{ padding-top:0; }
+.vicolo-riquadro{ border:1px dashed rgba(230,178,74,.4); border-radius:22px; padding:36px 26px; text-align:center; }
+.vicolo-riquadro .occhiello{ justify-content:center; }
+.vicolo-riquadro .occhiello::before{ display:none; }
+.vicolo-riquadro h2{ font-size:clamp(1.7rem, 4.4vw, 2.4rem); max-width:22ch; margin:0 auto; }
+.vicolo-riquadro .testo{ margin-left:auto; margin-right:auto; }
+.vicolo-dove{ display:inline-flex; gap:8px; align-items:center; margin-top:18px; color:var(--oro-tenue); }
+.vicolo-dove a{ display:inline-flex; gap:8px; align-items:center; text-decoration:none; }
+
+/* ---------- piede ---------- */
+.piede{ text-align:center; padding:56px 0 40px; border-top:1px solid var(--linea); color:var(--tenue); font-size:.92rem; }
+.piede img{ margin:0 auto 10px; height:72px; width:auto; }
+.piede p{ margin-top:6px; }
+.piede a{ color:var(--crema); text-decoration-color:rgba(247,239,226,.3); text-underline-offset:3px; }
+.piede-nome{ font-family:var(--f-titoli); font-size:1.5rem; color:var(--crema); }
+.piede-motto{ font-family:var(--f-corsivo); font-style:italic; color:var(--oro); margin-top:0 !important; }
+.social{ display:flex; justify-content:center; gap:12px; margin:18px 0 8px !important; }
+.social a{ width:44px; height:44px; border-radius:50%; display:grid; place-items:center; border:1px solid var(--linea); color:var(--oro-tenue); transition:background .2s; }
+.social a:hover{ background:rgba(230,178,74,.1); }
+.piccolo{ font-size:.8rem; opacity:.75; margin-top:16px !important; }
+
+/* ---------- barra in basso (solo telefono) ---------- */
+.barra{
+  position:fixed; inset:auto 0 0; z-index:60; display:grid; grid-template-columns:1fr 1fr 1.25fr;
+  background:rgba(26,18,16,.96); border-top:1px solid var(--linea);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.barra a{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+  padding:9px 4px 8px; text-decoration:none; color:var(--tenue);
+  font-family:var(--f-titoli); text-transform:uppercase; letter-spacing:.1em; font-size:.68rem;
+}
+.barra .ico{ width:22px; height:22px; }
+.barra a.primo{ background:var(--carminio); color:var(--crema); }
+@media (max-width:879px){ body{ padding-bottom:calc(62px + env(safe-area-inset-bottom)); } }
+@media (min-width:880px){ .barra{ display:none; } }
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  .carta,.stato.aperto .pallino{ animation:none; }
+  .btn,.carta,.piatto{ transition:none; }
+}
