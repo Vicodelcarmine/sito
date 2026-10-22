@@ -48,7 +48,7 @@
     ] },
     { "titolo": "spec_primi", "piatti": [
         {"foto": "chitarra-scoglio", "nome": "Chitarrina allo scoglio", "it": "Cozze, vongole, calamari, canocchie e gamberetti", "en": "Mussels, clams, squid, mantis shrimp and prawns"},
-        {"foto": "carbonara-mare", "nome": "Chitarrina alla carbonara di mare", "it": "Cozze, vongole, calamari e gamberetti, uovo e pepe nero", "en": "Mussels, clams, squid and prawns, egg and black pepper"}
+        {"foto": "carbonara", "nome": "Chitarrina alla carbonara", "it": "Guanciale affumicato, uovo, pecorino e pepe nero", "en": "Smoked guanciale, egg, pecorino and black pepper"}
     ] },
     { "titolo": "spec_secondi", "piatti": [
         {"foto": "branzino-griglia", "nome": "Branzino alla griglia", "it": "Spigola o orata, cotta alla griglia", "en": "Sea bass or sea bream, cooked on the grill"},
