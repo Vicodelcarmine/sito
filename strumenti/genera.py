@@ -191,7 +191,7 @@ def main():
     with open(os.path.join(RADICE, "robots.txt"), "w", encoding="utf-8") as f:
         f.write("User-agent: *\nAllow: /\nSitemap: https://%s/sitemap.xml\n" % d["dominio"])
     with open(os.path.join(RADICE, "CNAME"), "w", encoding="utf-8") as f:
-        f.write(d["dominio"] + "\n")
+        f.write(d["dominio"])               # senza a capo, come lo scrive GitHub
     print("scritti sitemap.xml, robots.txt, CNAME (%s)" % d["dominio"])
 
 if __name__ == "__main__":
