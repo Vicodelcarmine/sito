@@ -96,7 +96,8 @@
         <p class="occhiello">{{pren_occhiello}}</p>
         <h2>{{pren_titolo}}</h2>
         <p class="testo">{{pren_testo}}</p>
-        <div class="azioni">
+        <div id="pren-app"></div>
+        <div class="azioni pren-chiama">
           <a class="btn btn-chiaro" href="tel:{{TEL}}">{{I_telefono}}{{CHIAMA}}</a>
           {{WHATSAPP}}
         </div>
@@ -160,5 +161,6 @@
 
 <script>window.SITO = {{SITO_JSON}};</script>
 <script src="{{BASE}}assets/js/sito.js?v={{V_JS}}" defer></script>
+{{PRENOTA_JS}}
 </body>
 </html>

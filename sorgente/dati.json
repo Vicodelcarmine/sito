@@ -24,6 +24,13 @@
   },
 
   "menu": "https://vicodelcarmine.github.io/menu/",
+
+  "_prenotazioni": "Prenotazioni dal sito: il database del Vico (chiave pubblica, va bene nel sito) e il link che apre la tessera del Club nel menu. Vuoto = niente modulo, solo il tasto per chiamare.",
+  "prenotazioni": {
+    "url": "https://agbvmhpktilpaoabjkre.supabase.co",
+    "chiave": "sb_publishable_2O5l8ZbQqGnwDXwxZnsZ2Q_0Mt1V8T7",
+    "tessera": "https://vicodelcarmine.github.io/menu/?club="
+  },
   "cucina": ["Napoletana", "Pizza", "Pesce"],
   "fascia_prezzo": "€€",
 

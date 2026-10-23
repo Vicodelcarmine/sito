@@ -279,3 +279,96 @@ p{ margin:0; }
   .btn,.carta,.piatto{ transition:none; }
 }
 .credito{ margin-top:4px !important; }
+
+/* ---------- modulo di prenotazione (dentro il riquadro rosso) ---------- */
+.pren, .pren-fatto, .pren-mie, .pren-nota { max-width: 640px; }
+.pren-passo {
+  font-family: var(--f-titoli); text-transform: uppercase; letter-spacing: .16em; font-size: .78rem;
+  color: var(--oro-tenue); margin: 24px 0 10px;
+}
+.pren-giorni {
+  display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x proximity;
+  padding: 2px 2px 10px; margin: 0 -2px; scrollbar-width: none;
+}
+.pren-giorni::-webkit-scrollbar { display: none; }
+.pren-giorno, .pren-turno {
+  font: inherit; color: var(--crema); cursor: pointer;
+  border: 1px solid rgba(247,239,226,.25); background: rgba(0,0,0,.18);
+  display: flex; flex-direction: column; align-items: center; transition: background .2s, color .2s;
+}
+.pren-giorno { flex: 0 0 auto; width: 66px; padding: 8px 0 9px; border-radius: 14px; gap: 1px; scroll-snap-align: start; }
+.pren-giorno span { font-size: .72rem; opacity: .8; }
+.pren-giorno b { font-family: var(--f-titoli); font-size: 1.45rem; font-weight: 500; line-height: 1.1; }
+.pren-turni { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+.pren-turno { padding: 12px; border-radius: 14px; }
+.pren-turno b { font-family: var(--f-titoli); font-size: 1.35rem; font-weight: 500; }
+.pren-turno span { font-size: .78rem; opacity: .85; }
+.pren-giorno.on, .pren-turno.on { background: var(--crema); color: #3a0d14; border-color: var(--crema); }
+.pren-giorno:disabled, .pren-turno:disabled { opacity: .35; cursor: default; }
+.pren-quante {
+  display: inline-flex; align-items: center; border-radius: 999px; overflow: hidden;
+  border: 1px solid rgba(247,239,226,.3); background: rgba(0,0,0,.18);
+}
+.pren-quante button { width: 52px; height: 48px; border: 0; background: none; color: var(--crema); font-size: 1.5rem; cursor: pointer; }
+.pren-quante button:disabled { opacity: .3; cursor: default; }
+.pren-quante output { min-width: 110px; text-align: center; font-weight: 500; }
+.pren-campi { display: grid; gap: 12px; }
+.pren-campi .pren-campo { margin: 0; }
+@media (min-width: 700px) { .pren-campi { grid-template-columns: 1fr 1fr; } }
+.pren-campo { display: block; margin-top: 14px; }
+.pren-campo span { display: block; font-size: .82rem; color: rgba(247,239,226,.88); margin-bottom: 5px; }
+.pren-campo small { opacity: .75; font-size: inherit; }
+.pren input[type=text], .pren input[type=tel], .pren input[type=email], .pren input[type=date], .pren textarea {
+  width: 100%; min-height: 48px; padding: 11px 14px; border-radius: 12px; font: inherit; font-size: 16px;
+  border: 1px solid rgba(247,239,226,.3); background: rgba(0,0,0,.22); color: var(--crema);
+  -webkit-appearance: none; appearance: none;
+}
+.pren input[type=date] { color-scheme: dark; }
+.pren textarea { min-height: 72px; resize: vertical; }
+.pren input:focus, .pren textarea:focus { outline: none; border-color: var(--oro); }
+.pren ::placeholder { color: rgba(247,239,226,.45); }
+.pren-spunta { display: flex; gap: 10px; align-items: flex-start; margin-top: 16px; font-size: .92rem; cursor: pointer; }
+.pren-spunta input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--oro); flex: none; }
+.pren-privacy { margin: 6px 0 0 30px; font-size: .82rem; color: rgba(247,239,226,.82); }
+.pren-privacy summary { cursor: pointer; color: var(--oro-tenue); text-decoration: underline; text-underline-offset: 3px; }
+.pren-privacy p { margin-top: 8px; }
+.pren-club, .pren-nota { margin-top: 14px; font-size: .92rem; color: var(--oro-tenue); }
+.pren-nota a, .pren-errore a { color: inherit; }
+.pren-socio { font-size: 1rem; }
+.pren-link {
+  background: none; border: 0; padding: 0; font: inherit; cursor: pointer;
+  color: var(--oro-tenue); text-decoration: underline; text-underline-offset: 3px;
+}
+.pren-errore {
+  margin-top: 16px; padding: 10px 12px; border-radius: 12px; font-size: .92rem;
+  background: rgba(0,0,0,.3); border: 1px solid rgba(255,180,170,.5); color: #ffd9d3;
+}
+.pren-invia { margin-top: 22px; width: 100%; justify-content: center; min-height: 54px; font-size: 1rem; }
+.pren-invia:disabled { opacity: .6; cursor: default; transform: none; }
+.pren-fatto { text-align: center; margin: 26px auto 0; outline: none; }
+.pren-ok {
+  width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 12px; display: grid; place-items: center;
+  background: var(--basilico); color: #142008; font-size: 2rem; font-weight: 700;
+}
+.pren-fatto h3 { font-size: 1.7rem; }
+.pren-fatto p { margin-top: 8px; }
+.pren-codice b { font-family: var(--f-titoli); letter-spacing: .14em; font-size: 1.15rem; font-weight: 500; }
+.pren-fatto .azioni { justify-content: center; }
+.pren-fatto .pren-link { margin-top: 18px; }
+.pren-mie { margin-top: 22px; padding: 14px 16px; border-radius: 16px; background: rgba(0,0,0,.22); border: 1px solid rgba(247,239,226,.2); }
+.pren-mie h3 { font-size: 1rem; text-transform: uppercase; letter-spacing: .14em; color: var(--oro-tenue); }
+.pren-mie ul { list-style: none; margin: 8px 0 0; padding: 0; }
+.pren-mie li {
+  display: flex; justify-content: space-between; gap: 12px; align-items: center;
+  padding: 9px 0; border-top: 1px solid rgba(247,239,226,.12); font-size: .92rem;
+}
+.pren-mie li:first-child { border-top: 0; }
+.pren-mie small { opacity: .7; letter-spacing: .08em; }
+.pren-demo {
+  display: inline-block; margin-top: 14px; padding: 4px 10px; border-radius: 999px;
+  background: var(--oro); color: #2a1a08; font-size: .75rem; font-weight: 600;
+}
+/* con il modulo in pagina il tasto per chiamare passa in secondo piano */
+#pren-app:not(:empty) + .pren-chiama { margin-top: 18px; }
+#pren-app:not(:empty) + .pren-chiama .btn-chiaro { background: transparent; color: var(--crema); border-color: rgba(247,239,226,.55); }
+.pren-mie .pren-club { margin: 0 0 4px; }

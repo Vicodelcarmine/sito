@@ -149,11 +149,19 @@ def costruisci(d, t, lingua):
     }
     v["JSONLD"] = json.dumps(jsonld, ensure_ascii=False).replace("</", "<\\/")
 
-    v["SITO_JSON"] = json.dumps({
+    sito = {
         "orari": d["orari"],
         "giorni": t["giorni"],
         "testi": {k: t[k] for k in ["stato_aperto", "stato_apre_oggi", "stato_apre", "stato_chiuso", "domani"]},
-    }, ensure_ascii=False).replace("</", "<\\/")
+    }
+    # prenotazioni dal sito: senza la sezione "prenotazioni" in dati.json resta solo il tasto per chiamare
+    v["PRENOTA_JS"] = ""
+    if (d.get("prenotazioni") or {}).get("url"):
+        sito.update({"lingua": lingua, "nome": d["nome"], "indirizzo": d["indirizzo"] + ", " + d["citta"],
+                     "telefono": d["telefono"], "telefonoVisto": d["telefono_visto"],
+                     "prenota": d["prenotazioni"], "pren": t["pren"]})
+        v["PRENOTA_JS"] = '<script src="%sassets/js/prenota.js?v=%s" defer></script>' % (base, impronta("assets/js/prenota.js"))
+    v["SITO_JSON"] = json.dumps(sito, ensure_ascii=False).replace("</", "<\\/")
 
     with open(os.path.join(RADICE, "sorgente", "pagina.html"), encoding="utf-8") as f:
         pagina = f.read()
