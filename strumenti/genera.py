@@ -5,10 +5,11 @@
 
 Legge sorgente/dati.json (il ristorante), sorgente/testi.json (le parole, una
 sezione per lingua) e sorgente/pagina.html (lo stampo), e scrive:
-index.html (italiano), en/index.html (inglese), sitemap.xml, robots.txt, CNAME.
+index.html (italiano), en/index.html (inglese), sitemap.xml, robots.txt, CNAME
+e, se c'è l'asporto, asporto/index.html (l'indirizzo corto per volantini e social).
 Per il sito di un altro locale basta cambiare dati.json e testi.json.
 """
-import hashlib, html, json, os, re
+import hashlib, html, json, os, re, shutil
 
 RADICE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LINGUE = ["it", "en"]                       # la prima è quella principale (alla radice)
@@ -187,6 +188,27 @@ def costruisci(d, t, lingua):
         raise SystemExit("Testi mancanti per '%s': %s" % (lingua, ", ".join(sorted(mancanti))))
     return pagina, url_lingua[lingua]
 
+# dominio/asporto: rimanda subito al menu in modalità asporto. Si stampa su volantini,
+# bio dei social e scheda Google; gli eventuali ?parametri passano al menu.
+def pagina_asporto(d):
+    dest = d["menu"] + "?asporto=1"
+    return """<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asporto · %(nome)s</title>
+  <meta name="robots" content="noindex">
+  <meta http-equiv="refresh" content="0; url=%(dest)s">
+  <link rel="canonical" href="%(dest)s">
+  <script>location.replace(%(dest_js)s + (location.search ? "&" + location.search.slice(1) : ""));</script>
+</head>
+<body style="margin:0;min-height:100vh;display:grid;place-items:center;background:#1a1210;color:#f3e9dc;font:16px/1.5 system-ui,sans-serif">
+  <p><a href="%(dest)s" style="color:#e2b45a">Ordina da asporto · %(nome)s</a></p>
+</body>
+</html>
+""" % {"nome": esc(d["nome"]), "dest": esc(dest), "dest_js": json.dumps(dest)}
+
 def main():
     with open(os.path.join(RADICE, "sorgente", "dati.json"), encoding="utf-8") as f:
         d = json.load(f)
@@ -211,6 +233,14 @@ def main():
     with open(os.path.join(RADICE, "CNAME"), "w", encoding="utf-8") as f:
         f.write(d["dominio"])               # senza a capo, come lo scrive GitHub
     print("scritti sitemap.xml, robots.txt, CNAME (%s)" % d["dominio"])
+    cartella = os.path.join(RADICE, "asporto")
+    if d.get("asporto"):
+        os.makedirs(cartella, exist_ok=True)
+        with open(os.path.join(cartella, "index.html"), "w", encoding="utf-8") as f:
+            f.write(pagina_asporto(d))
+        print("scritto asporto/index.html → %s?asporto=1" % d["menu"])
+    elif os.path.isdir(cartella):
+        shutil.rmtree(cartella)             # asporto spento nei dati: niente indirizzo corto
 
 if __name__ == "__main__":
     main()
