@@ -46,6 +46,12 @@
     "chiama": "Chiama {tel}",
     "whatsapp": "Scrivici su WhatsApp",
 
+    "asp_occhiello": "Asporto",
+    "asp_titolo_html": "Ordina dal menu,<br><em>passa a ritirare</em>",
+    "asp_testo": "Scegli i piatti dal menu e l'ora di ritiro di stasera: quando arrivi è pronto, e paghi al ritiro.",
+    "asp_bottone": "Ordina da asporto",
+    "nav_asporto": "Asporto",
+
     "club_occhiello": "Club del Vico",
     "club_titolo_html": "Entra nel Club:<br><em>la prossima volta offriamo noi</em>",
     "club_testo": "Iscriversi è gratis. Alla tua prossima visita ti aspetta un omaggio, e per il compleanno un regalo da festeggiare con gli amici.",
@@ -182,6 +188,12 @@
     "pren_testo": "Pick the evening and your arrival time: your booking is confirmed straight away.",
     "chiama": "Call {tel}",
     "whatsapp": "Message us on WhatsApp",
+
+    "asp_occhiello": "Takeaway",
+    "asp_titolo_html": "Order from the menu,<br><em>collect it tonight</em>",
+    "asp_testo": "Pick your dishes from the menu and a collection time tonight: it's ready when you arrive, and you pay when you collect.",
+    "asp_bottone": "Order takeaway",
+    "nav_asporto": "Takeaway",
 
     "club_occhiello": "Club del Vico",
     "club_titolo_html": "Join the Club:<br><em>next time it's on us</em>",

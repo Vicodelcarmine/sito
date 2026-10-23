@@ -34,6 +34,7 @@ ICONE = {
     "whatsapp": svg('<path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"/><path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"/>'),
     "instagram": svg('<path d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16.5 7.5v.01"/>'),
     "facebook": svg('<path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"/>'),
+    "borsa": svg('<path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z"/><path d="M9 11v-5a3 3 0 0 1 6 0v5"/>'),
     "tiktok": svg('<path d="M21 7.917v4.034a9.948 9.948 0 0 1 -5 -1.951v4.5a6.5 6.5 0 1 1 -8 -6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.005 6.005 0 0 0 4.917 4.917z"/>'),
 }
 
@@ -122,6 +123,15 @@ def costruisci(d, t, lingua):
             esc(t["piede_credito"]), chi,
             (" · " + esc(cr["ditta"])) if cr.get("ditta") else "",
             (" · " + esc(t["piede_piva"]) + " " + esc(cr["partita_iva"])) if cr.get("partita_iva") else "")
+
+    # asporto: una sezione con il tasto che apre il menu in modalità asporto
+    v["ASPORTO"] = v["NAV_ASPORTO"] = ""
+    if d.get("asporto"):
+        v["NAV_ASPORTO"] = '<a href="#asporto">%s</a>' % v["nav_asporto"]
+        v["ASPORTO"] = ('<section class="sezione asporto" id="asporto"><div class="contenitore"><div class="asporto-riquadro">'
+                        '<div><p class="occhiello">%s</p><h2>%s</h2><p class="testo">%s</p></div>'
+                        '<a class="btn" href="%s?asporto=1">%s%s</a></div></div></section>'
+                        % (v["asp_occhiello"], t["asp_titolo_html"], v["asp_testo"], esc(d["menu"]), ICONE["borsa"], v["asp_bottone"]))
 
     vic = d.get("vicolo") or {}
     v["VICOLO"] = ""

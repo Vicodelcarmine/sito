@@ -24,6 +24,8 @@
   },
 
   "menu": "https://vicodelcarmine.github.io/menu/",
+  "_asporto": "true = sezione Asporto sul sito, che apre il menu in modalità asporto (menu?asporto=1).",
+  "asporto": true,
 
   "_prenotazioni": "Prenotazioni dal sito: il database del Vico (chiave pubblica, va bene nel sito) e il link che apre la tessera del Club nel menu. Vuoto = niente modulo, solo il tasto per chiamare.",
   "prenotazioni": {

@@ -373,3 +373,14 @@ p{ margin:0; }
 #pren-app:not(:empty) + .pren-chiama { margin-top: 18px; }
 #pren-app:not(:empty) + .pren-chiama .btn-chiaro { background: transparent; color: var(--crema); border-color: rgba(247,239,226,.55); }
 .pren-mie .pren-club { margin: 0 0 4px; }
+
+/* ---------- asporto ---------- */
+.asporto{ padding-top:0; }
+.asporto-riquadro{
+  display:grid; gap:22px; align-items:center; padding:34px 26px; border-radius:24px;
+  background:var(--carta); border:1px solid var(--linea);
+}
+.asporto-riquadro .btn{ justify-self:start; }
+@media (min-width:880px){
+  .asporto-riquadro{ grid-template-columns:1fr auto; padding:48px 56px; }
+}
