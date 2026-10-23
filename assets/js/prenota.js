@@ -132,10 +132,14 @@
           const d = db(), o = oggiFirenze(), giorni = [];
           for (let i = 0; i <= 30; i++) {
             const s = piuGiorni(o, i), chiuso = giornoSett(s) === 1;   // nella demo il lunedì è chiuso
-            giorni.push({ sera: s, chiuso: chiuso, turni: ["19:30", "21:30"].map(function (t, k) {
-              const pieno = (i === 1 && k === 1) || chiuso;               // domani alle 21:30 è pieno
+            const orari = ["19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30"];
+            giorni.push({ sera: s, chiuso: chiuso, turni: orari.map(function (t) {
+              const k = t < "21:00" ? 1 : 2;
+              const pieno = (i === 1 && k === 2) || chiuso;               // domani il secondo turno è pieno
               const passato = i === 0 && daFirenze(s, t).getTime() - 2 * 3600e3 < Date.now();
-              return { ora: t, liberi: pieno || passato ? 0 : Math.min(8, 40 - occupati(d, s, t) - (i === 2 ? 36 : 0)) };
+              const presi = orari.filter(function (o) { return (o < "21:00" ? 1 : 2) === k; })
+                .reduce(function (n, o) { return n + occupati(d, s, o); }, 0);
+              return { ora: t, fascia: k, liberi: pieno || passato ? 0 : Math.max(0, Math.min(8, 40 - presi - (i === 2 ? 36 : 0))) };
             }) });
           }
           return { attive: true, maxPersone: 8, giorni: giorni };
@@ -182,7 +186,7 @@
   }
   function prenotabile(g) { return !g.chiuso && g.turni.some(function (t) { return t.liberi > 0; }); }
 
-  // la prima sera e il primo turno con posto, se quelli scelti non vanno più bene
+  // la prima sera con posto, se quella scelta non va più bene; l'ora di arrivo la sceglie il cliente
   function scegliPrimi() {
     const g = giornoScelto();
     if (!g || !prenotabile(g)) {
@@ -191,12 +195,14 @@
       turno = null;
     }
     const t = turnoScelto();
-    if (!t || t.liberi < 1) {
-      const g2 = giornoScelto(), libero = g2 && g2.turni.find(function (x) { return x.liberi > 0; });
-      turno = libero ? libero.ora : null;
-    }
-    const t2 = turnoScelto();
-    if (t2) quante = Math.max(1, Math.min(quante, t2.liberi));
+    if (t && t.liberi < 1) turno = null;
+    quante = Math.max(1, Math.min(quante, maxQuante()));
+  }
+  // quante persone si possono ancora prenotare: per l'ora scelta, o per la migliore della sera
+  function maxQuante() {
+    const t = turnoScelto(), g = giornoScelto();
+    if (t) return t.liberi;
+    return g ? Math.max.apply(null, g.turni.map(function (x) { return x.liberi; }).concat(0)) : 0;
   }
 
   /* ---------- disegno ---------- */
@@ -206,8 +212,7 @@
     scegliPrimi();
     if (!sera) { app.innerHTML = '<p class="pren-nota">' + riempi(P.nessuna, { tel: telLink() }) + "</p>"; return; }
     const socio = leggi(K_SOCIO, null);
-    const t = turnoScelto();
-    const max = t ? t.liberi : 0;
+    const max = maxQuante();
     app.innerHTML =
       '<div class="pren-mie" id="pren-mie" hidden></div>' +
       '<form class="pren" id="pren" novalidate>' +
@@ -220,12 +225,15 @@
           "<span>" + esc(nome) + "</span><b>" + p[2] + "</b><span>" + esc(ok ? P.mesi[p[1] - 1] : g.chiuso ? P.chiuso : g.sera === oggiFirenze() ? P.solo_telefono : P.pieno) + "</span></button>";
       }).join("") + "</div>" +
       '<p class="pren-passo">' + esc(P.turno) + "</p>" +
-      '<div class="pren-turni">' + giornoScelto().turni.map(function (x) {
-        // oggi un turno senza posti online di solito è solo "troppo tardi": al telefono si può ancora
+      '<div class="pren-turni">' + giornoScelto().turni.map(function (x, i, tutti) {
+        // oggi un orario senza posti online di solito è solo "troppo tardi": al telefono si può ancora
         const stato = x.liberi < 1 ? (giornoScelto().chiuso ? P.chiuso : sera === oggiFirenze() ? P.solo_telefono : P.pieno)
-          : x.liberi < disp.maxPersone ? P.ultimi : P.liberi;
-        return '<button type="button" class="pren-turno' + (x.ora === turno ? " on" : "") + '" data-ora="' + esc(x.ora) + '"' +
-          (x.liberi < 1 ? " disabled" : "") + ' aria-pressed="' + (x.ora === turno) + '"><b>' + esc(x.ora) + "</b><span>" + esc(stato) + "</span></button>";
+          : x.liberi < disp.maxPersone ? P.ultimi : "";
+        // ogni turno comincia su una riga nuova: si vede che sono due momenti della sera
+        const aCapo = i > 0 && x.fascia !== tutti[i - 1].fascia;
+        return '<button type="button" class="pren-turno' + (x.ora === turno ? " on" : "") + (aCapo ? " a-capo" : "") +
+          '" data-ora="' + esc(x.ora) + '"' + (x.liberi < 1 ? " disabled" : "") + ' aria-pressed="' + (x.ora === turno) + '">' +
+          "<b>" + esc(x.ora) + "</b><span>" + (stato ? esc(stato) : "&nbsp;") + "</span></button>";
       }).join("") + "</div>" +
       '<p class="pren-passo">' + esc(P.persone) + "</p>" +
       '<div class="pren-quante">' +

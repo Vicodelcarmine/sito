@@ -299,10 +299,11 @@ p{ margin:0; }
 .pren-giorno { flex: 0 0 auto; width: 66px; padding: 8px 0 9px; border-radius: 14px; gap: 1px; scroll-snap-align: start; }
 .pren-giorno span { font-size: .72rem; opacity: .8; }
 .pren-giorno b { font-family: var(--f-titoli); font-size: 1.45rem; font-weight: 500; line-height: 1.1; }
-.pren-turni { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
-.pren-turno { padding: 12px; border-radius: 14px; }
-.pren-turno b { font-family: var(--f-titoli); font-size: 1.35rem; font-weight: 500; }
-.pren-turno span { font-size: .78rem; opacity: .85; }
+.pren-turni { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 480px; }
+.pren-turno { padding: 9px 4px 7px; border-radius: 12px; }
+.pren-turno.a-capo { grid-column-start: 1; }
+.pren-turno b { font-family: var(--f-titoli); font-size: 1.2rem; font-weight: 500; line-height: 1.15; }
+.pren-turno span { font-size: .7rem; opacity: .85; }
 .pren-giorno.on, .pren-turno.on { background: var(--crema); color: #3a0d14; border-color: var(--crema); }
 .pren-giorno:disabled, .pren-turno:disabled { opacity: .35; cursor: default; }
 .pren-quante {

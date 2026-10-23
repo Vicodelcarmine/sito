@@ -42,7 +42,7 @@
 
     "pren_occhiello": "Prenotazioni",
     "pren_titolo": "Prenota il tuo tavolo",
-    "pren_testo": "Scegli la sera e il turno: la conferma arriva subito.",
+    "pren_testo": "Scegli la sera e l'ora in cui arrivate: la conferma arriva subito.",
     "chiama": "Chiama {tel}",
     "whatsapp": "Scrivici su WhatsApp",
 
@@ -66,14 +66,14 @@
 
     "pren": {
       "sera": "La sera",
-      "turno": "Il turno",
+      "turno": "A che ora arrivate",
       "persone": "Quante persone",
       "dati": "I tuoi dati",
       "oggi": "oggi",
       "domani": "domani",
       "mesi": ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"],
       "liberi": "posti liberi",
-      "ultimi": "ultimi posti",
+      "ultimi": "ultimi",
       "pieno": "pieno",
       "chiuso": "chiuso",
       "solo_telefono": "chiama",
@@ -117,9 +117,9 @@
       "e_email": "Scrivi un'email valida.",
       "e_nascita": "Scrivi la tua data di nascita.",
       "e_privacy": "Per prenotare serve la spunta sull'informativa privacy.",
-      "e_scegli": "Scegli la sera e il turno.",
-      "e_pieno": "Il turno si è appena riempito: scegline un altro.",
-      "e_tardi": "È tardi per prenotare online questo turno: chiamaci.",
+      "e_scegli": "Scegli la sera e l'ora di arrivo.",
+      "e_pieno": "Quell'orario si è appena riempito: scegline un altro.",
+      "e_tardi": "È tardi per prenotare online quest'orario: chiamaci.",
       "e_sera": "Quella sera non si può prenotare: scegline un'altra.",
       "e_gruppo": "Per gruppi più grandi chiamaci.",
       "e_troppe": "Troppe prenotazioni: chiamaci.",
@@ -179,7 +179,7 @@
 
     "pren_occhiello": "Reservations",
     "pren_titolo": "Book your table",
-    "pren_testo": "Pick the evening and the time: your booking is confirmed straight away.",
+    "pren_testo": "Pick the evening and your arrival time: your booking is confirmed straight away.",
     "chiama": "Call {tel}",
     "whatsapp": "Message us on WhatsApp",
 
@@ -203,7 +203,7 @@
 
     "pren": {
       "sera": "The evening",
-      "turno": "The time",
+      "turno": "Your arrival time",
       "persone": "How many people",
       "dati": "Your details",
       "oggi": "today",
@@ -254,8 +254,8 @@
       "e_email": "Please enter a valid email.",
       "e_nascita": "Please enter your date of birth.",
       "e_privacy": "Please tick the privacy notice box to book.",
-      "e_scegli": "Choose the evening and the time.",
-      "e_pieno": "That time has just filled up: please choose another.",
+      "e_scegli": "Choose the evening and your arrival time.",
+      "e_pieno": "That time has just filled up: please choose another one.",
       "e_tardi": "It's too late to book this time online: please call us.",
       "e_sera": "That evening can't be booked: please choose another.",
       "e_gruppo": "For larger groups please call us.",
