@@ -221,6 +221,29 @@ def scrivi_rimando(nome, pagina):
         f.write(pagina)
     print("scritto %s/index.html" % nome)
 
+# dominio/privacy: l'informativa (italiano e inglese) in una pagina sua, da linkare dove serve
+# (Meta la chiede per l'app di WhatsApp; i testi sono quelli del modulo di prenotazione)
+def pagina_privacy(d, testi):
+    blocchi = "".join('<section lang="%s"><h1>%s</h1>%s</section>' % (l, esc(testi[l]["pren"]["privacy_titolo"]), testi[l]["pren"]["privacy_testo"])
+                      for l in LINGUE)
+    return """<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy · %(nome)s</title>
+  <link rel="canonical" href="https://%(dominio)s/privacy/">
+</head>
+<body style="margin:0;background:#1a1210;color:#f7efe2;font:16px/1.6 system-ui,sans-serif">
+  <main style="max-width:720px;margin:0 auto;padding:32px 20px 60px">
+    <p><a href="/" style="color:#e6b24a">← %(nome)s</a></p>
+    %(blocchi)s
+  </main>
+  <style>h1{font-size:1.5rem;margin:28px 0 8px;color:#edcf94} p{margin:10px 0} section+section{margin-top:40px;border-top:1px solid #3a2a24;padding-top:8px}</style>
+</body>
+</html>
+""" % {"nome": esc(d["nome"]), "dominio": d["dominio"], "blocchi": blocchi}
+
 def main():
     with open(os.path.join(RADICE, "sorgente", "dati.json"), encoding="utf-8") as f:
         d = json.load(f)
@@ -248,6 +271,7 @@ def main():
     scrivi_rimando("asporto", pagina_rimando(d, "Asporto", "Ordina da asporto", d["menu"] + "?asporto=1")
                    if d.get("asporto") else None)
     scrivi_rimando("club", pagina_rimando(d, "Club", "Entra nel Club", d["menu"] + "?club=apri"))
+    scrivi_rimando("privacy", pagina_privacy(d, testi))
 
 if __name__ == "__main__":
     main()
