@@ -334,6 +334,16 @@ p{ margin:0; }
 .pren-privacy summary { cursor: pointer; color: var(--oro-tenue); text-decoration: underline; text-underline-offset: 3px; }
 .pren-privacy p { margin-top: 8px; }
 .pren-club, .pren-nota { margin-top: 14px; font-size: .92rem; color: var(--oro-tenue); }
+/* il modulo corto: l'informativa sotto il telefono, senza spunta */
+.pren-campi + .pren-privacy { margin: 10px 0 0; }
+/* nella conferma: il prosecco di benvenuto e il Club facoltativo */
+.pren-benvenuto { max-width: 520px; margin: 16px auto 0; padding: 14px 18px; border-radius: 16px; background: rgba(230,178,74,.16);
+  border: 1px solid rgba(230,178,74,.6); color: var(--crema); font-weight: 500; }
+.pren-club-box { max-width: 520px; margin: 26px auto 0; padding: 20px 20px 22px; border-radius: 20px; background: rgba(0,0,0,.2);
+  border: 1px dashed rgba(230,178,74,.6); }
+.pren-club-box h4 { font-family: var(--f-titoli); font-weight: 600; font-size: 1.25rem; letter-spacing: .02em; color: var(--oro-tenue); }
+.pren-club-box > p { margin-top: 6px; font-size: .92rem; }
+.pren-club-box .btn { margin-top: 16px; width: 100%; justify-content: center; }
 .pren-nota a, .pren-errore a { color: inherit; }
 .pren-socio { font-size: 1rem; }
 .pren-link {

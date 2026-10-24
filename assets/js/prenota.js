@@ -1,9 +1,11 @@
 /* Vico del Carmine — prenotazioni dal sito.
    Parla con il database del Vico (funzioni pren_* in vico-agenti/supabase/10-prenotazioni.sql):
-   posti liberi, prenota, le mie prenotazioni, annulla. Chi prenota entra nel Club del Vico;
-   chi è già nel Club viene riconosciuto da telefono + email.
+   posti liberi, prenota, le mie prenotazioni, annulla. Per prenotare bastano nome e telefono
+   (15-prenota-facile.sql); chi ha un numero già nel Club viene riconosciuto. Il cliente nuovo
+   ha il prosecco di benvenuto; con le conferme WhatsApp accese il premio arriva nel messaggio.
+   Dopo la prenotazione il Club è facoltativo: un riquadro chiede solo la data di nascita.
    Questo browser ricorda solo i "segreti" delle sue prenotazioni (per vederle e annullarle)
-   e, se la prenotazione l'ha fatto entrare nel Club, la chiave della tessera.
+   e, se è entrato nel Club, la chiave della tessera.
    ?demo=1 → server finto nel browser, per provare senza toccare i dati veri (?demo=0 per uscire). */
 (function () {
   "use strict";
@@ -101,6 +103,16 @@
     }).catch(function () {});
   }
 
+  // il WhatsApp di conferma parte subito (se non parte, ci pensa il giro dei 2 minuti)
+  function mandaWhatsapp() {
+    if (DEMO || !disp || !disp.whatsapp) return;
+    fetch(CFG.url + "/functions/v1/whatsapp-invia", {
+      method: "POST", keepalive: true,
+      headers: { apikey: CFG.chiave, "Content-Type": "application/json" },
+      body: JSON.stringify({ azione: "invia" }),
+    }).catch(function () {});
+  }
+
   const server = DEMO ? serverFinto() : {
     disponibilita: function () { return rpc("pren_disponibilita"); },
     prenota: function (d) {
@@ -112,6 +124,11 @@
     },
     mie: function (segreti) { return rpc("pren_mie", { p_segreti: segreti }); },
     annulla: function (segreto) { return rpc("pren_annulla", { p_segreto: segreto }); },
+    club: function (d) {
+      return rpc("club_iscriviti", { p_nome: d.nome, p_email: d.email || "", p_telefono: d.telefono, p_nascita: d.nascita,
+        p_promo: !!d.promo, p_lingua: S.lingua || "it", p_dispositivo: dispositivo() });
+    },
+    collega: function (segreto, chiave) { return rpc("pren_collega_club", { p_segreto: segreto, p_chiave: chiave }); },
   };
 
   // il server finto della demo: stesse risposte, dati nella memoria del browser
@@ -142,19 +159,21 @@
               return { ora: t, fascia: k, liberi: pieno || passato ? 0 : Math.max(0, Math.min(8, 40 - presi - (i === 2 ? 36 : 0))) };
             }) });
           }
-          return { attive: true, maxPersone: 8, giorni: giorni };
+          return { attive: true, maxPersone: 8, giorni: giorni, whatsapp: false, benvenutoMax: 4 };
         });
       },
       prenota: function (x) {
         return attesa(function () {
           const d = db();
-          if (d.prenotazioni.some(function (p) { return p.sera === x.sera && p.stato === "confermata"; })) throw errore("doppia", P.e_doppia);
-          const nuovo = !x.chiave;
-          const p = { codice: caso(6), segreto: caso(24), sera: x.sera, turno: x.turno, persone: x.persone,
-            nome: x.nome || (leggi(K_SOCIO, {}).nome) || "Demo", nota: x.nota || "", stato: "confermata" };
+          const tel = x.chiave ? "socio" : String(x.telefono || "").replace(/\D/g, "");
+          if (d.prenotazioni.some(function (p) { return p.tel === tel && p.sera === x.sera && p.stato === "confermata"; })) throw errore("doppia", P.e_doppia);
+          const visto = d.prenotazioni.some(function (p) { return p.tel === tel && p.stato !== "annullata"; });
+          const p = { codice: caso(6), segreto: caso(24), sera: x.sera, turno: x.turno, persone: x.persone, tel: tel,
+            nome: x.nome || (leggi(K_SOCIO, {}).nome) || "Demo", nota: x.nota || "", stato: "confermata",
+            benvenuto: x.chiave || visto ? 0 : Math.min(4, x.persone), whatsapp: null };
           d.prenotazioni.push(p);
           scrivi(K, d);
-          return Object.assign({}, p, { nuovo: nuovo, chiave: nuovo ? caso(24) : null });
+          return Object.assign({}, p, { socio: !!x.chiave, nuovo: false, chiave: null });
         });
       },
       mie: function (segreti) {
@@ -162,6 +181,13 @@
           return db().prenotazioni.filter(function (p) { return segreti.indexOf(p.segreto) >= 0 && p.sera >= piuGiorni(oggiFirenze(), -1); });
         });
       },
+      club: function (x) {
+        return attesa(function () {
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(x.nascita || "")) throw errore("nascita", P.e_nascita);
+          return { chiave: caso(24), nome: x.nome };
+        });
+      },
+      collega: function () { return attesa(function () { return true; }); },
       annulla: function (segreto) {
         return attesa(function () {
           const d = db(), p = d.prenotazioni.find(function (x) { return x.segreto === segreto; });
@@ -245,14 +271,11 @@
       (socio && socio.chiave
         ? '<p class="pren-socio">' + esc(riempi(P.socio, { nome: socio.nome })) + ' <button type="button" class="pren-link" id="pren-non-io">' + esc(P.non_sei_tu) + "</button></p>"
         : '<div class="pren-campi">' +
-            campo("nome", P.nome, "text", "name") + campo("telefono", P.telefono, "tel", "tel") +
-            campo("email", P.email, "email", "email") +
-            '<label class="pren-campo"><span>' + esc(P.nascita) + " <small>· " + esc(P.nascita_perche) + "</small></span>" +
-              '<input name="nascita" type="date" autocomplete="bday"></label></div>' +
-          '<label class="pren-spunta"><input type="checkbox" name="privacy"><span>' + esc(P.privacy) + "</span></label>" +
-          '<details class="pren-privacy"><summary>' + esc(P.privacy_titolo) + "</summary>" + P.privacy_testo + "</details>" +
-          '<label class="pren-spunta"><input type="checkbox" name="promo"><span>' + esc(P.promo) + "</span></label>" +
-          '<p class="pren-club">' + esc(P.club) + "</p>") +
+            campo("nome", P.nome, "text", "name") +
+            '<label class="pren-campo"><span>' + esc(P.telefono) + " <small>· " + esc(disp.whatsapp ? P.tel_aiuto_wa : P.tel_aiuto) +
+              '</small></span><input name="telefono" type="tel" autocomplete="tel" inputmode="tel"></label></div>' +
+          '<details class="pren-privacy"><summary>' + esc(P.privacy_breve) + " " + esc(P.privacy_titolo) + "</summary>" +
+            P.privacy_testo + "</details>") +
       '<label class="pren-campo"><span>' + esc(P.nota) + '</span><textarea name="nota" rows="2" maxlength="300" placeholder="' +
         esc(P.nota_esempio) + '"></textarea></label>' +
       '<p class="pren-errore" id="pren-errore" role="alert" hidden></p>' +
@@ -318,14 +341,8 @@
     } else {
       dati.nome = f.elements.nome.value.trim();
       dati.telefono = f.elements.telefono.value.trim();
-      dati.email = f.elements.email.value.trim();
-      dati.nascita = f.elements.nascita.value;
-      dati.promo = f.elements.promo.checked;
       if (dati.nome.length < 2) return sbaglio(esc(P.e_nome), "nome");
       if (dati.telefono.replace(/\D/g, "").length < 8) return sbaglio(esc(P.e_telefono), "telefono");
-      if (!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(dati.email)) return sbaglio(esc(P.e_email), "email");
-      if (!dati.nascita) return sbaglio(esc(P.e_nascita), "nascita");
-      if (!f.elements.privacy.checked) return sbaglio(esc(P.e_privacy), "privacy");
     }
     inviando = true;
     const btn = f.querySelector(".pren-invia");
@@ -338,6 +355,7 @@
       scrivi(K_MIE, mie.slice(-20));
       if (r.chiave) scrivi(K_SOCIO, { chiave: r.chiave, nome: String(r.nome || dati.nome || "").split(/\s+/)[0] });
       avvisaTitolare();
+      mandaWhatsapp();
       fatto(r, dati);
       aggiornaDisponibilita();
     } catch (er) {
@@ -351,7 +369,7 @@
         return sbaglio(esc(P.e_nome), "nome");
       }
       const testo = esc(P["e_" + er.codice] || er.message || P.e_server);
-      const campi = { nome: "nome", telefono: "telefono", email: "email", nascita: "nascita" };
+      const campi = { nome: "nome", telefono: "telefono" };
       if (er.codice === "pieno" || er.codice === "tardi" || er.codice === "sera") aggiornaDisponibilita(testo);
       else sbaglio(er.codice === "gruppo" || er.codice === "troppe" || er.codice === "tante" || er.codice === "rete" || er.codice === "chiuse"
         ? testo + " " + telLink() : testo, campi[er.codice]);
@@ -368,17 +386,69 @@
       "<h3>" + esc(P.fatto) + "</h3>" +
       "<p>" + esc(riempi(P.fatto_quando, { giorno: giornoBreve(r.sera), ora: r.turno, persone: persone(r.persone) })) + "</p>" +
       '<p class="pren-codice">' + esc(P.codice) + " <b>" + esc(r.codice) + "</b></p>" +
-      (r.nuovo ? '<p class="pren-club">' + esc(P.benvenuto) + "</p>" : "") +
+      (r.benvenuto > 0
+        ? '<p class="pren-benvenuto">' + esc(riempi(r.whatsapp ? P.benv_wa : P.benv_schermo, { n: persone(r.benvenuto) })) + "</p>"
+        : r.whatsapp ? '<p class="pren-club">' + esc(P.conf_wa) + "</p>" : "") +
       '<div class="azioni">' +
         '<a class="btn btn-chiaro" download="vico-del-carmine.ics" href="' + esc(calendario(r, inizio)) + '">📅 ' + esc(P.calendario) + "</a>" +
         (socio && socio.chiave && CFG.tessera
           ? '<a class="btn btn-vuoto-chiaro" href="' + esc(CFG.tessera + socio.chiave) + '">💳 ' + esc(P.tessera) + "</a>" : "") +
       "</div>" +
-      '<button type="button" class="pren-link" id="pren-altra">' + esc(P.altra) + "</button></div>";
+      '<button type="button" class="pren-link" id="pren-altra">' + esc(P.altra) + "</button></div>" +
+      (!r.socio && !(socio && socio.chiave) && dati.telefono ? boxClub() : "");
+    legaClub(r, dati);
     const box = document.getElementById("pren-fatto");
     box.focus({ preventScroll: true });
     box.scrollIntoView({ block: "center", behavior: "smooth" });
     document.getElementById("pren-altra").addEventListener("click", function () { disegna(); });
+  }
+
+  // dopo la prenotazione, il Club facoltativo: nome e telefono ci sono già, manca la data di nascita
+  function boxClub() {
+    return '<form class="pren-club-box" id="pren-club" novalidate>' +
+      "<h4>" + esc(P.club_tit) + "</h4><p>" + esc(P.club_sotto) + "</p>" +
+      '<label class="pren-campo"><span>' + esc(P.nascita) + " <small>· " + esc(P.nascita_perche) + "</small></span>" +
+        '<input name="nascita" type="date" autocomplete="bday"></label>' +
+      campo("email", P.email_fac, "email", "email") +
+      '<label class="pren-spunta"><input type="checkbox" name="privacy"><span>' + esc(P.privacy) + "</span></label>" +
+      '<label class="pren-spunta"><input type="checkbox" name="promo"><span>' + esc(P.promo) + "</span></label>" +
+      '<p class="pren-errore" role="alert" hidden></p>' +
+      '<button class="btn btn-chiaro pren-club-invia" type="submit">' + esc(P.club_entra) + "</button></form>";
+  }
+  function legaClub(r, dati) {
+    const f = document.getElementById("pren-club");
+    if (!f) return;
+    const errore = f.querySelector(".pren-errore");
+    const no = function (testo, campoNome) {
+      errore.textContent = testo;
+      errore.hidden = false;
+      const c = campoNome && f.elements[campoNome];
+      if (c && c.focus) c.focus();
+    };
+    f.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      errore.hidden = true;
+      const d = { nome: dati.nome, telefono: dati.telefono, nascita: f.elements.nascita.value,
+                  email: f.elements.email.value.trim(), promo: f.elements.promo.checked };
+      if (!d.nascita) return no(P.e_nascita, "nascita");
+      if (d.email && !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(d.email)) return no(P.e_email, "email");
+      if (!f.elements.privacy.checked) return no(P.club_e_privacy, "privacy");
+      const b = f.querySelector(".pren-club-invia");
+      b.disabled = true;
+      b.textContent = P.invio;
+      try {
+        const c = await server.club(d);
+        scrivi(K_SOCIO, { chiave: c.chiave, nome: String(c.nome || d.nome).split(/\s+/)[0] });
+        server.collega(r.segreto, c.chiave).catch(function () {});
+        f.innerHTML = '<p class="pren-club">' + esc(P.club_ok) + "</p>" +
+          (CFG.tessera ? '<a class="btn btn-chiaro" href="' + esc(CFG.tessera + c.chiave) + '">💳 ' + esc(P.tessera) + "</a>" : "");
+      } catch (er) {
+        b.disabled = false;
+        b.textContent = P.club_entra;
+        if (er.codice === "gia") { f.innerHTML = '<p class="pren-club">' + esc(P.club_gia) + "</p>"; return; }
+        no(P["e_" + er.codice] || er.message || P.e_server, { nascita: "nascita", email: "email" }[er.codice]);
+      }
+    });
   }
 
   // il file per il calendario del telefono (due ore a partire dal turno)
