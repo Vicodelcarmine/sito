@@ -119,7 +119,7 @@
           if (!CODICE) throw errore("codice", R.e_codice);
           const socio = leggi(K_SOCIO, null);
           return { nome: "Giulia Rossi", telefono: "+393331234567", email: "giulia@example.com",
-                   socio: !!(socio && socio.chiave), aperta: true, sere: 14, scopriEntro: "2026-11-30", giorniNo: [6],
+                   socio: !!(socio && socio.chiave), aperta: true, sere: 15, scopriEntro: null, giorniNo: [6],
                    premi: PREMI.map(function (p) { return { emoji: p.emoji, nome: p.nome }; }), premio: leggi(K, null) };
         });
       },
@@ -135,7 +135,7 @@
           for (const p of PREMI) { x -= p.peso; if (x < 0) { pr = p; break; } }
           const dal = piuSere(oggi(), 1);
           const premio = { codice: "DEMO123", tipo: "regalo", emoji: pr.emoji, nome: pr.nome, descr: pr.descr, persone: pr.persone,
-                           dal: dal, al: piuSere(dal, 14), giorniNo: [6], stato: "valido", soloPrenotati: true };
+                           dal: dal, al: piuSere(dal, 15), giorniNo: [6], stato: "valido", soloPrenotati: true };
           scrivi(K, premio);
           return { premio: premio, nuovo: true };
         }, 600);
