@@ -286,7 +286,8 @@
     // la descrizione dice già per quante persone; se manca, lo diciamo noi
     const descr = (p.descr && p.descr.it) || (p.persone > 0 ? riempi(R.per_persone, { n: p.persone }) : "");
     app.innerHTML = '<div class="reg-premio' + (festa ? " festa" : "") + '">' +
-      (festa ? '<div class="reg-coriandoli" aria-hidden="true">' + "🎉✨🎊✨🎉✨🎊✨".split("").map(function (c, i) {
+      // Array.from e non split(""): le emoji sono fatte di due pezzi e split le spezza
+      (festa ? '<div class="reg-coriandoli" aria-hidden="true">' + Array.from("🎉✨🎊✨🎉✨🎊✨").map(function (c, i) {
         return '<span style="--i:' + i + '">' + c + "</span>"; }).join("") + "</div>" : "") +
       '<p class="occhiello">' + esc(R.hai_vinto) + "</p>" +
       '<div class="reg-emoji grande" aria-hidden="true">' + esc(p.emoji) + "</div>" +
