@@ -7,7 +7,7 @@ Legge sorgente/dati.json (il ristorante), sorgente/testi.json (le parole, una
 sezione per lingua) e sorgente/pagina.html (lo stampo), e scrive:
 index.html (italiano), en/index.html (inglese), sitemap.xml, robots.txt, CNAME
 e gli indirizzi corti per volantini e social: club/index.html e, se c'è l'asporto,
-asporto/index.html.
+asporto/index.html. In più privacy/index.html e regalo/index.html (le campagne).
 Per il sito di un altro locale basta cambiare dati.json e testi.json.
 """
 import hashlib, html, json, os, re, shutil
@@ -244,6 +244,67 @@ def pagina_privacy(d, testi):
 </html>
 """ % {"nome": esc(d["nome"]), "dominio": d["dominio"], "blocchi": blocchi}
 
+# dominio/regalo/?c=CODICE: la pagina del regalo a sorpresa delle campagne (solo italiano).
+# Il codice personale arriva per email o WhatsApp; la pagina fa entrare nel Club, svela il
+# premio (assets/js/regalo.js) e sotto ha il modulo di prenotazione del sito (prenota.js).
+# Il codice sta nell'indirizzo: niente indicizzazione e niente referrer verso altri siti.
+def pagina_regalo(d, testi):
+    t = testi["it"]
+    r = t["regalo"]
+    sito = {"lingua": "it", "nome": d["nome"], "indirizzo": d["indirizzo"] + ", " + d["citta"],
+            "telefono": d["telefono"], "telefonoVisto": d["telefono_visto"], "giorni": t["giorni"],
+            "prenota": d["prenotazioni"], "pren": t["pren"], "regalo": r}
+    return """<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>%(titolo)s · %(nome)s</title>
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#1a1210">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <link rel="preload" href="../assets/fonts/oswald.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/font.css?v=%(v_font)s">
+  <link rel="stylesheet" href="../assets/css/sito.css?v=%(v_css)s">
+</head>
+<body class="pagina-regalo">
+<header class="reg-testa">
+  <a class="marchio" href="../">
+    <img src="../assets/img/mascotte-240.png" alt="" width="172" height="240">
+    <span>%(nome)s</span>
+  </a>
+</header>
+<main>
+  <section class="sezione regalo"><div class="contenitore"><div id="reg-app" class="reg-app"><p class="reg-piccolo">%(attendi)s</p></div></div></section>
+  <section class="sezione prenota" id="prenota" hidden>
+    <div class="contenitore"><div class="riquadro">
+      <p class="occhiello">%(pren_occhiello)s</p>
+      <h2>%(pren_titolo)s</h2>
+      <p class="testo" id="reg-prenota-testo"></p>
+      <div id="pren-app"></div>
+      <div class="azioni pren-chiama"><a class="btn btn-chiaro" href="tel:%(tel)s">%(ico_tel)s%(chiama)s</a></div>
+    </div></div>
+  </section>
+</main>
+<footer class="reg-piede">
+  <p>%(nome)s · %(indirizzo)s, %(citta)s · <a href="tel:%(tel)s">%(tel_visto)s</a> · <a href="../privacy/">Privacy</a></p>
+</footer>
+<script>window.SITO = %(sito)s;</script>
+<script src="../assets/js/regalo.js?v=%(v_regalo)s" defer></script>
+<script src="../assets/js/prenota.js?v=%(v_prenota)s" defer></script>
+</body>
+</html>
+""" % {"nome": esc(d["nome"]), "titolo": esc(r["titolo_pagina"]), "attendi": esc(t["pren"]["invio"]),
+       "pren_occhiello": esc(t["prenota"]), "pren_titolo": r["prenota_titolo_html"],
+       "tel": esc(d["telefono"]), "tel_visto": esc(d["telefono_visto"]), "ico_tel": ICONE["telefono"],
+       "chiama": esc(t["chiama"].replace("{tel}", d["telefono_visto"])),
+       "indirizzo": esc(d["indirizzo"]), "citta": esc(d["citta"]),
+       "sito": json.dumps(sito, ensure_ascii=False).replace("</", "<\\/"),
+       "v_font": impronta("assets/css/font.css"), "v_css": impronta("assets/css/sito.css"),
+       "v_regalo": impronta("assets/js/regalo.js"), "v_prenota": impronta("assets/js/prenota.js")}
+
 def main():
     with open(os.path.join(RADICE, "sorgente", "dati.json"), encoding="utf-8") as f:
         d = json.load(f)
@@ -272,6 +333,7 @@ def main():
                    if d.get("asporto") else None)
     scrivi_rimando("club", pagina_rimando(d, "Club", "Entra nel Club", d["menu"] + "?club=apri"))
     scrivi_rimando("privacy", pagina_privacy(d, testi))
+    scrivi_rimando("regalo", pagina_regalo(d, testi) if (d.get("prenotazioni") or {}).get("url") else None)
 
 if __name__ == "__main__":
     main()

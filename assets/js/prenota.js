@@ -281,6 +281,11 @@
       '<p class="pren-errore" id="pren-errore" role="alert" hidden></p>' +
       '<button class="btn btn-chiaro pren-invia" type="submit">' + esc(P.conferma) + "</button>" +
       "</form>";
+    // chi arriva da un link personale (pagina del regalo) trova già nome e telefono
+    const pre = S.precompila || {}, f0 = document.getElementById("pren");
+    ["nome", "telefono"].forEach(function (k) {
+      if (pre[k] && f0.elements[k] && !f0.elements[k].value) f0.elements[k].value = pre[k];
+    });
     legaModulo();
     mostraMie();
   }
@@ -397,6 +402,7 @@
       '<button type="button" class="pren-link" id="pren-altra">' + esc(P.altra) + "</button></div>" +
       (!r.socio && !(socio && socio.chiave) && dati.telefono ? boxClub() : "");
     legaClub(r, dati);
+    window.dispatchEvent(new CustomEvent("vdc-prenotato", { detail: r }));
     const box = document.getElementById("pren-fatto");
     box.focus({ preventScroll: true });
     box.scrollIntoView({ block: "center", behavior: "smooth" });
@@ -519,5 +525,9 @@
     }
   }
   if (DEMO) app.insertAdjacentHTML("beforebegin", '<p class="pren-demo">DEMO · niente di vero</p>');
+  // la pagina del regalo ha appena fatto entrare il cliente nel Club: il modulo lo riconosce
+  window.addEventListener("vdc-ridisegna", function () {
+    if (disp && !document.getElementById("pren-fatto")) ridisegna();
+  });
   aggiornaDisponibilita();
 })();

@@ -394,3 +394,61 @@ p{ margin:0; }
 @media (min-width:880px){
   .asporto-riquadro{ grid-template-columns:1fr auto; padding:48px 56px; }
 }
+
+/* ---------- pagina del regalo (regalo/?c=CODICE, assets/js/regalo.js) ---------- */
+.reg-testa{ padding:14px var(--margine); border-bottom:1px solid var(--linea); }
+.reg-testa .marchio{ max-width:var(--larghezza); margin:0 auto; }
+.regalo{ padding:44px 0 36px;
+  background:radial-gradient(ellipse at 50% -10%, rgba(230,178,74,.18), transparent 60%); }
+.reg-app{ max-width:640px; margin:0 auto; }
+.reg-app h1{ font-size:clamp(2.2rem, 8vw, 3.4rem); }
+.reg-app .testo{ max-width:none; }
+.reg-piccolo{ font-size:.9rem; color:var(--tenue); }
+.reg-chips{ list-style:none; display:flex; flex-wrap:wrap; gap:8px; padding:0; margin:22px 0 0; }
+.reg-chips li{ display:flex; gap:6px; align-items:center; padding:6px 12px; border-radius:999px; font-size:.84rem;
+  background:rgba(230,178,74,.1); border:1px solid rgba(230,178,74,.35); }
+.reg-scheda{ margin-top:28px; padding:24px 22px; border-radius:22px; background:var(--carta); border:1px solid var(--linea); }
+.reg-scheda.pren{ max-width:none; }
+.reg-sotto{ font-size:1.5rem; color:var(--oro-tenue); }
+.reg-scheda .reg-piccolo{ margin-top:6px; }
+.reg-socio{ font-size:1.1rem; }
+.reg-grande{ margin-top:20px; width:100%; justify-content:center; min-height:56px; font-size:1.05rem; }
+.reg-grande:disabled{ opacity:.6; cursor:default; transform:none; }
+.reg-centro{ text-align:center; }
+.reg-centro .azioni{ justify-content:center; }
+.reg-emoji{ font-size:3rem; line-height:1; }
+.reg-emoji.grande{ font-size:clamp(4.5rem, 22vw, 6.5rem); margin:8px 0 10px; }
+
+/* l'attesa: il pacco che trema e il conto alla rovescia */
+.reg-attesa{ text-align:center; padding:40px 0 30px; }
+.reg-pacco{ font-size:6rem; line-height:1; display:inline-block; animation:reg-trema .45s ease-in-out infinite; }
+.reg-conta{ font-family:var(--f-titoli); font-size:4rem; line-height:1; margin-top:18px; color:var(--oro); }
+.reg-conta.batti{ animation:reg-batti .5s ease-out; }
+@keyframes reg-trema{ 0%,100%{ transform:rotate(0) } 25%{ transform:rotate(-9deg) scale(1.04) } 75%{ transform:rotate(9deg) scale(1.04) } }
+@keyframes reg-batti{ from{ transform:scale(1.8); opacity:0 } to{ transform:scale(1); opacity:1 } }
+
+/* il premio */
+.reg-premio{ position:relative; text-align:center; padding:28px 22px 30px; border-radius:26px;
+  background:linear-gradient(160deg, var(--vino), #3d0f17); border:1px solid rgba(237,207,148,.4); box-shadow:var(--ombra); }
+.reg-premio .occhiello{ justify-content:center; color:var(--oro-tenue); }
+.reg-premio .occhiello::before{ display:none; }
+.reg-premio h1{ font-size:clamp(2rem, 7vw, 2.8rem); }
+.reg-premio .testo{ margin:12px auto 0; }
+.reg-premio .azioni{ justify-content:center; }
+.reg-valido{ margin-top:16px; font-size:.92rem; color:var(--oro-tenue); }
+.reg-premio.festa .reg-emoji{ animation:reg-esce .7s cubic-bezier(.2,1.6,.4,1) both; }
+@keyframes reg-esce{ from{ transform:scale(.2) rotate(-25deg); opacity:0 } to{ transform:none; opacity:1 } }
+.reg-coriandoli{ position:absolute; inset:0; overflow:hidden; pointer-events:none; border-radius:inherit; }
+.reg-coriandoli span{ position:absolute; top:-10%; left:calc(6% + var(--i) * 12%); font-size:1.5rem;
+  animation:reg-cade 2.2s ease-in calc(var(--i) * .12s) both; }
+@keyframes reg-cade{ from{ transform:translateY(0) rotate(0); opacity:1 } to{ transform:translateY(520px) rotate(320deg); opacity:0 } }
+
+.pagina-regalo .prenota{ padding-top:20px; }
+.reg-piede{ text-align:center; padding:30px var(--margine) 40px; border-top:1px solid var(--linea); color:var(--tenue); font-size:.85rem; }
+.reg-piede a{ color:var(--oro-tenue); }
+@media (prefers-reduced-motion: reduce){
+  .reg-pacco, .reg-conta.batti, .reg-premio.festa .reg-emoji, .reg-coriandoli span{ animation:none; }
+  .reg-coriandoli{ display:none; }
+}
+
+.reg-scheda .pren-campi{ margin-top:16px; }
