@@ -241,6 +241,12 @@
       const c = await server.club(d);
       chiave = c.chiave;
       scrivi(K_SOCIO, { chiave: c.chiave, nome: primoNome(c.nome || d.nome) });
+      // da dove è arrivato (il canale della visita lo legge prenota.js; qui di solito è la campagna)
+      if (!DEMO) {
+        let canale = "campagna:regalo";
+        try { canale = sessionStorage.getItem("vdc_canale") || canale; } catch (e) {}
+        rpc("club_canale", { p_chiave: c.chiave, p_canale: canale }).catch(function () {});
+      }
     } catch (er) {
       // già nel Club con il numero o l'email del link: il premio va lo stesso alla sua tessera
       if (er.codice !== "gia") {

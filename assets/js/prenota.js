@@ -30,6 +30,37 @@
   function scrivi(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   const K_SOCIO = DEMO ? "vdc_sito_socio_demo" : "vdc_sito_socio";   // { chiave, nome }
   const K_MIE = DEMO ? "vdc_sito_pren_demo" : "vdc_sito_pren";       // [segreti]
+
+  /* ---------- da dove arriva chi visita (20-dashboard-fondamenta.sql) ----------
+     Dal link (?ref=instagram, utm_source) o dalla pagina di provenienza (Google, Instagram…).
+     Si tiene solo per questa visita, niente cookie né identificativi: va sulla prenotazione o
+     sull'iscrizione al Club fatta adesso, e nel conteggio anonimo delle visite del giorno. */
+  const CANALE = (function () {
+    try {
+      const gia = sessionStorage.getItem("vdc_canale");
+      if (gia) return gia;
+      const q = new URLSearchParams(location.search);
+      let c = q.get("ref") || q.get("utm_source") || "";
+      if (!c && /\/regalo\//.test(location.pathname)) c = "campagna:regalo";
+      if (!c && document.referrer) {
+        const h = new URL(document.referrer).hostname.replace(/^www\./, "");
+        if (h === location.hostname.replace(/^www\./, "")) c = "diretto";
+        else if (/(^|\.)google\./.test(h)) c = "google";
+        else if (/instagram\./.test(h)) c = "instagram";
+        else if (/(facebook|fb)\./.test(h)) c = "facebook";
+        else if (/tiktok\./.test(h)) c = "tiktok";
+        else if (/(thefork|lafourchette)\./.test(h)) c = "thefork";
+        else if (/tripadvisor\./.test(h)) c = "tripadvisor";
+        else if (/vicodelcarmine\.github\.io/.test(h)) c = "menu";
+        else if (/(whatsapp|wa)\.(com|me)/.test(h)) c = "whatsapp";
+        else if (/(bing|duckduckgo|yahoo|ecosia)\./.test(h)) c = "ricerca";
+        else c = "altro-sito";
+      }
+      c = String(c || "diretto").toLowerCase().replace(/[^a-z0-9:._-]/g, "").slice(0, 40) || "diretto";
+      sessionStorage.setItem("vdc_canale", c);
+      return c;
+    } catch (e) { return "diretto"; }
+  })();
   function dispositivo() {
     let d = leggi("vdc_sito_disp", "");
     if (!d) { d = Math.random().toString(36).slice(2) + Date.now().toString(36); scrivi("vdc_sito_disp", d); }
@@ -92,6 +123,22 @@
     // le funzioni pren_* mettono il loro codice nel campo "hint"
     if (!r.ok) throw errore((d && d.hint) || "server", (d && d.message) || P.e_server);
     return d;
+  }
+  // il canale della visita sulla prenotazione o sull'iscrizione appena fatta (se fallisce, pazienza)
+  function segnaCanale(segreto, chiave) {
+    if (DEMO) return;
+    if (segreto) rpc("pren_canale", { p_segreto: segreto, p_canale: CANALE }).catch(function () {});
+    if (chiave) rpc("club_canale", { p_chiave: chiave, p_canale: CANALE }).catch(function () {});
+  }
+  // una visita per pagina per visita, nel conteggio anonimo del giorno
+  function contaVisita() {
+    if (DEMO) return;
+    const pagina = /\/regalo\//.test(location.pathname) ? "regalo" : /^\/en\//.test(location.pathname) ? "home-en" : "home";
+    try {
+      if (sessionStorage.getItem("vdc_visita_" + pagina)) return;
+      sessionStorage.setItem("vdc_visita_" + pagina, "1");
+    } catch (e) { return; }
+    rpc("sito_visita", { p_pagina: pagina, p_canale: CANALE }).catch(function () {});
   }
   // avvisa subito il titolare (se non parte, ci pensa il giro dei 5 minuti)
   function avvisaTitolare() {
@@ -359,6 +406,7 @@
       mie.push(r.segreto);
       scrivi(K_MIE, mie.slice(-20));
       if (r.chiave) scrivi(K_SOCIO, { chiave: r.chiave, nome: String(r.nome || dati.nome || "").split(/\s+/)[0] });
+      segnaCanale(r.segreto, r.chiave);
       avvisaTitolare();
       mandaWhatsapp();
       fatto(r, dati);
@@ -445,6 +493,7 @@
       try {
         const c = await server.club(d);
         scrivi(K_SOCIO, { chiave: c.chiave, nome: String(c.nome || d.nome).split(/\s+/)[0] });
+        segnaCanale(null, c.chiave);
         server.collega(r.segreto, c.chiave).catch(function () {});
         f.innerHTML = '<p class="pren-club">' + esc(P.club_ok) + "</p>" +
           (CFG.tessera ? '<a class="btn btn-chiaro" href="' + esc(CFG.tessera + c.chiave) + '">💳 ' + esc(P.tessera) + "</a>" : "");
@@ -530,4 +579,5 @@
     if (disp && !document.getElementById("pren-fatto")) ridisegna();
   });
   aggiornaDisponibilita();
+  contaVisita();
 })();
