@@ -132,7 +132,7 @@
   }
   // una visita per pagina per visita, nel conteggio anonimo del giorno
   function contaVisita() {
-    if (DEMO) return;
+    if (DEMO || /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return;   // le anteprime sul computer non contano
     const pagina = /\/regalo\//.test(location.pathname) ? "regalo" : /^\/en\//.test(location.pathname) ? "home-en" : "home";
     try {
       if (sessionStorage.getItem("vdc_visita_" + pagina)) return;
