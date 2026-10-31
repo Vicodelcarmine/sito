@@ -147,7 +147,7 @@
           if (OFFERTA_DEMO) pr = Object.assign({ persone: 4 }, OFFERTA_DEMO.premio);
           const dal = piuSere(oggi(), 1);
           const premio = { codice: "DEMO123", tipo: "regalo", emoji: pr.emoji, nome: pr.nome, descr: pr.descr, persone: pr.persone,
-                           dal: dal, al: piuSere(dal, 15), giorniNo: [6], stato: "valido", soloPrenotati: true };
+                           dal: dal, al: piuSere(dal, 15), giorniNo: OFFERTA_DEMO ? [] : [6], stato: "valido", soloPrenotati: true };
           scrivi(K, premio);
           return { premio: premio, nuovo: true };
         }, 600);
