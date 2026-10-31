@@ -4,6 +4,8 @@
      camp_vista  → chi è (nome, telefono ed email già pronti), i premi in palio, il suo premio se c'è
      club_iscriviti → entra nel Club (manca solo la data di nascita)
      camp_scopri → il premio a sorpresa, che vale solo prenotando dal sito
+   Con vista.offerta (29-prenota-diretto.sql) non c'è sorpresa: l'offerta è già decisa, e il modulo
+   parte dalla sera e dalle persone della prenotazione che il cliente ha già fatto altrove.
    Sotto c'è il modulo di prenotazione del sito (prenota.js): nome e telefono già scritti,
    e dopo l'iscrizione riconosce il socio dalla tessera salvata in questo browser.
    ?demo=1 → server finto nel browser, per provare senza toccare i dati veri (?demo=0 per uscire). */
@@ -99,6 +101,14 @@
       { id: "DOLCE", emoji: "🍰", nome: { it: "Dolce della casa offerto" }, descr: { it: "Un dolce della casa a testa, per 2 persone." }, persone: 2, peso: 15 },
       { id: "SPRITZ", emoji: "🍹", nome: { it: "Spritz offerto" }, descr: { it: "Uno Spritz Aperol o Hugo a testa, per 2 persone." }, persone: 2, peso: 10 },
     ];
+    // ?diretto=30 o ?diretto=0: l'offerta già decisa (30% + prosecco, oppure solo prosecco), per la terza sera buona
+    const QUALE = new URLSearchParams(location.search).get("diretto");
+    const OFFERTA_DEMO = QUALE == null ? null : {
+      sera: piuSere(oggi(), 3), persone: 4,
+      premio: QUALE === "30"
+        ? { emoji: "🥂", nome: { it: "30% sul menù alla carta + prosecco di benvenuto" }, descr: { it: "30% di sconto sul menù alla carta per tutto il tavolo (bevande e menù fissi esclusi) e un calice di prosecco di benvenuto a testa, fino a 4 persone." } }
+        : { emoji: "🥂", nome: { it: "Prosecco di benvenuto per il tavolo" }, descr: { it: "Un calice di prosecco di benvenuto a testa, fino a 4 persone." } },
+    };
     function attesa(fn, ms) {
       return new Promise(function (ok, ko) { setTimeout(function () { try { ok(fn()); } catch (e) { ko(e); } }, ms || 400); });
     }
@@ -120,7 +130,8 @@
           const socio = leggi(K_SOCIO, null);
           return { nome: "Giulia Rossi", telefono: "+393331234567", email: "giulia@example.com",
                    socio: !!(socio && socio.chiave), aperta: true, sere: 15, scopriEntro: null, giorniNo: [6],
-                   premi: PREMI.map(function (p) { return { emoji: p.emoji, nome: p.nome }; }), premio: leggi(K, null) };
+                   premi: PREMI.map(function (p) { return { emoji: p.emoji, nome: p.nome }; }),
+                   offerta: OFFERTA_DEMO, premio: leggi(K, null) };
         });
       },
       club: function (d) {
@@ -133,6 +144,7 @@
           let tot = 0; PREMI.forEach(function (p) { tot += p.peso; });
           let x = Math.random() * tot, pr = PREMI[0];
           for (const p of PREMI) { x -= p.peso; if (x < 0) { pr = p; break; } }
+          if (OFFERTA_DEMO) pr = Object.assign({ persone: 4 }, OFFERTA_DEMO.premio);
           const dal = piuSere(oggi(), 1);
           const premio = { codice: "DEMO123", tipo: "regalo", emoji: pr.emoji, nome: pr.nome, descr: pr.descr, persone: pr.persone,
                            dal: dal, al: piuSere(dal, 15), giorniNo: [6], stato: "valido", soloPrenotati: true };
@@ -150,7 +162,9 @@
 
   function mostraPrenota(premio) {
     if (!sezPrenota) return;
-    S.precompila = { nome: vista && vista.nome, telefono: vista && telVisto(vista.telefono) };
+    const off = vista && vista.offerta;
+    S.precompila = { nome: vista && vista.nome, telefono: vista && telVisto(vista.telefono),
+                     sera: off && off.sera, persone: off && off.persone };
     const t = document.getElementById("reg-prenota-testo");
     if (t && premio) t.textContent = riempi(R.prenota_testo, { data: giornoLungo(premio.al) });
     sezPrenota.hidden = false;
@@ -166,7 +180,7 @@
   }
 
   function testa(titolo) {
-    return '<p class="occhiello">' + esc(R.occhiello) + "</p>" +
+    return '<p class="occhiello">' + esc(vista && vista.offerta ? R.d_occhiello : R.occhiello) + "</p>" +
       "<h1>" + titolo + "</h1>";
   }
 
@@ -179,19 +193,26 @@
   function disegnaInvito() {
     const socio = leggi(K_SOCIO, null);
     const nome = primoNome(vista.nome);
-    const titolo = riempi(R.titolo_html, { nome: esc(nome) });
+    const off = vista.offerta;
+    const titolo = riempi(off ? R.d_titolo_html : R.titolo_html, { nome: esc(nome) });
+    // l'offerta già decisa si dice subito; il regalo a sorpresa mostra cosa c'è in palio
+    const intro = off
+      ? '<div class="reg-scheda reg-centro"><div class="reg-emoji" aria-hidden="true">' + esc(off.premio.emoji) + "</div>" +
+        "<h2 class=\"reg-sotto\">" + esc(off.premio.nome.it) + '</h2><p class="testo">' + esc(off.premio.descr.it) + "</p>" +
+        (off.sera ? '<p class="reg-piccolo">' + esc(riempi(R.d_sera, { giorno: giornoLungo(off.sera) })) + "</p>" : "") + "</div>"
+      : '<p class="testo">' + esc(R.testo) + "</p>" + chips();
     // già nel Club (su questo telefono, oppure il numero o l'email del link): un tocco e via
     if ((socio && socio.chiave) || vista.socio) {
-      app.innerHTML = testa(titolo) + '<p class="testo">' + esc(R.testo) + "</p>" + chips() +
-        '<div class="reg-scheda"><p class="reg-socio">' + esc(riempi(R.gia_socio, { nome: nome })) + "</p>" +
+      app.innerHTML = testa(titolo) + intro +
+        '<div class="reg-scheda"><p class="reg-socio">' + esc(riempi(off ? R.d_gia_socio : R.gia_socio, { nome: nome })) + "</p>" +
         '<p class="pren-errore" id="reg-errore" role="alert" hidden></p>' +
-        '<button class="btn btn-chiaro reg-grande" id="reg-scopri" type="button">🎁 ' + esc(R.scopri) + "</button></div>";
+        '<button class="btn btn-chiaro reg-grande" id="reg-scopri" type="button">' + (off ? "🥂 " + esc(R.d_attiva) : "🎁 " + esc(R.scopri)) + "</button></div>";
       document.getElementById("reg-scopri").addEventListener("click", function () { scopri(socio && socio.chiave, this); });
       return;
     }
-    app.innerHTML = testa(titolo) + '<p class="testo">' + esc(R.testo) + "</p>" + chips() +
+    app.innerHTML = testa(titolo) + intro +
       '<form class="reg-scheda pren" id="reg-club" novalidate>' +
-        "<h2 class=\"reg-sotto\">" + esc(R.club_titolo) + "</h2><p class=\"reg-piccolo\">" + esc(R.club_sotto) + "</p>" +
+        "<h2 class=\"reg-sotto\">" + esc(off ? R.d_club_titolo : R.club_titolo) + "</h2><p class=\"reg-piccolo\">" + esc(off ? R.d_club_sotto : R.club_sotto) + "</p>" +
         '<div class="pren-campi">' +
           '<label class="pren-campo"><span>' + esc(P.nome) + '</span><input name="nome" type="text" autocomplete="name"></label>' +
           '<label class="pren-campo"><span>' + esc(P.telefono) + '</span><input name="telefono" type="tel" autocomplete="tel" inputmode="tel"></label>' +
@@ -203,7 +224,7 @@
         '<details class="pren-privacy"><summary>' + esc(P.privacy_titolo) + "</summary>" + (P.privacy_testo || "") + "</details>" +
         '<label class="pren-spunta"><input type="checkbox" name="promo"><span>' + esc(P.promo) + "</span></label>" +
         '<p class="pren-errore" id="reg-errore" role="alert" hidden></p>' +
-        '<button class="btn btn-chiaro reg-grande" type="submit">🎁 ' + esc(R.entra) + "</button>" +
+        '<button class="btn btn-chiaro reg-grande" type="submit">' + (off ? "🥂 " + esc(R.d_entra) : "🎁 " + esc(R.entra)) + "</button>" +
       "</form>";
     const f = document.getElementById("reg-club");
     f.elements.nome.value = vista.nome || "";
@@ -251,7 +272,7 @@
       // già nel Club con il numero o l'email del link: il premio va lo stesso alla sua tessera
       if (er.codice !== "gia") {
         b.disabled = false;
-        b.textContent = "🎁 " + R.entra;
+        b.textContent = vista.offerta ? "🥂 " + R.d_entra : "🎁 " + R.entra;
         return sbaglio(P["e_" + er.codice] || er.message || P.e_server, { nome: "nome", telefono: "telefono", email: "email", nascita: "nascita" }[er.codice]);
       }
     }
@@ -263,7 +284,8 @@
     if (bottone) { bottone.disabled = true; bottone.textContent = P.invio; }
     const domanda = server.scopri(chiave);
     domanda.catch(function () {});
-    const fermo = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // l'offerta non è una sorpresa: niente conto alla rovescia
+    const fermo = !!vista.offerta || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     if (!fermo) {
       app.innerHTML = '<div class="reg-attesa" aria-live="polite"><div class="reg-pacco" aria-hidden="true">🎁</div>' +
         '<p class="reg-conta" id="reg-conta">3</p><p class="reg-piccolo">' + esc(R.quasi) + "</p></div>";
@@ -279,6 +301,7 @@
       const r = await domanda;
       vista.premio = r.premio;
       disegnaPremio(r.premio, !fermo);
+      if (vista.offerta && sezPrenota) sezPrenota.scrollIntoView({ block: "start", behavior: "smooth" });
     } catch (er) {
       if (er.codice === "club") { vista.socio = false; try { localStorage.removeItem(K_SOCIO); } catch (x) {} disegnaInvito(); return sbaglio(R.e_club); }
       disegnaErrore(esc(R["e_" + er.codice] || er.message || P.e_server), er.codice === "finita" || er.codice === "finiti");
@@ -295,7 +318,7 @@
       // Array.from e non split(""): le emoji sono fatte di due pezzi e split le spezza
       (festa ? '<div class="reg-coriandoli" aria-hidden="true">' + Array.from("🎉✨🎊✨🎉✨🎊✨").map(function (c, i) {
         return '<span style="--i:' + i + '">' + c + "</span>"; }).join("") + "</div>" : "") +
-      '<p class="occhiello">' + esc(R.hai_vinto) + "</p>" +
+      '<p class="occhiello">' + esc(vista && vista.offerta ? R.d_hai : R.hai_vinto) + "</p>" +
       '<div class="reg-emoji grande" aria-hidden="true">' + esc(p.emoji) + "</div>" +
       "<h1>" + esc(p.nome.it) + "</h1>" +
       '<p class="testo">' + esc(descr) + "</p>" +
@@ -315,7 +338,12 @@
     if (!p || !box) return;
     const dentro = r.sera >= p.dal && r.sera <= p.al && (p.giorniNo || []).indexOf(new Date(r.sera + "T12:00:00Z").getUTCDay()) < 0;
     box.querySelector("h3").insertAdjacentHTML("afterend", '<p class="pren-benvenuto">' +
-      esc(p.emoji + " " + (dentro ? R.legato : riempi(R.non_legato, { data: giornoLungo(p.al) }))) + "</p>");
+      esc(p.emoji + " " + (dentro ? (vista.offerta ? R.d_legato : R.legato) : riempi(R.non_legato, { data: giornoLungo(p.al) }))) + "</p>");
+    // stessa sera della prenotazione fatta altrove: è il momento di chiedere di annullarla
+    if (vista.offerta && vista.offerta.sera === r.sera) {
+      box.querySelector(".pren-benvenuto").insertAdjacentHTML("afterend", '<p class="pren-benvenuto">⚠️ ' +
+        esc(riempi(R.d_annulla, { giorno: giornoLungo(r.sera) })) + "</p>");
+    }
   });
 
   /* ---------- avvio ---------- */

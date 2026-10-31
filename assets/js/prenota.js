@@ -250,6 +250,7 @@
   /* ---------- stato del modulo ---------- */
   let disp = null;          // risposta di pren_disponibilita
   let sera = null, turno = null, quante = 2;
+  let seraPronta = false;
   let inviando = false;
 
   function giornoScelto() { return disp && disp.giorni.find(function (g) { return g.sera === sera; }); }
@@ -282,6 +283,9 @@
   function disegna() {
     if (!disp) return;
     if (!disp.attive) { app.innerHTML = '<p class="pren-nota">' + riempi(P.spente, { tel: telLink() }) + "</p>"; return; }
+    // chi arriva da un'offerta personale con una serata già in mente parte da lì (una volta sola)
+    const pre1 = S.precompila || {};
+    if (pre1.sera && !seraPronta) { seraPronta = true; sera = pre1.sera; if (pre1.persone) quante = pre1.persone; }
     scegliPrimi();
     if (!sera) { app.innerHTML = '<p class="pren-nota">' + riempi(P.nessuna, { tel: telLink() }) + "</p>"; return; }
     const socio = leggi(K_SOCIO, null);
