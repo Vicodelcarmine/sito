@@ -6,8 +6,8 @@
 Legge sorgente/dati.json (il ristorante), sorgente/testi.json (le parole, una
 sezione per lingua) e sorgente/pagina.html (lo stampo), e scrive:
 index.html (italiano), en/index.html (inglese), sitemap.xml, robots.txt, CNAME
-e gli indirizzi corti per volantini e social: club/index.html e, se c'è l'asporto,
-asporto/index.html, prenota/index.html. In più privacy/index.html e regalo/index.html (le campagne).
+e gli indirizzi corti per volantini e social: menu/index.html, club/index.html,
+prenota/index.html e, se c'è l'asporto, asporto/index.html. In più privacy/index.html e regalo/index.html (le campagne).
 Per il sito di un altro locale basta cambiare dati.json e testi.json.
 """
 import hashlib, html, json, os, re, shutil
@@ -189,12 +189,13 @@ def costruisci(d, t, lingua):
         raise SystemExit("Testi mancanti per '%s': %s" % (lingua, ", ".join(sorted(mancanti))))
     return pagina, url_lingua[lingua]
 
-# indirizzi corti (dominio/asporto, dominio/club): rimandano subito al menu, in modalità
-# asporto o con l'iscrizione al Club aperta. Si stampano su volantini, bio dei social e
-# scheda Google; gli eventuali ?parametri (es. ?fonte=sacchetto) passano al menu.
+# indirizzi corti (dominio/menu, dominio/asporto, dominio/club): rimandano subito al menu,
+# in modalità asporto o con l'iscrizione al Club aperta. Si stampano su volantini, bio dei
+# social e scheda Google; gli eventuali ?parametri (es. ?fonte=sacchetto) passano al menu.
 # Se la destinazione ha un'ancora (#prenota) non passano: finirebbero dopo l'ancora.
 def pagina_rimando(d, titolo, testo, dest):
-    vai = json.dumps(dest) if "#" in dest else json.dumps(dest) + ' + (location.search ? "&" + location.search.slice(1) : "")'
+    sep = "&" if "?" in dest else "?"
+    vai = json.dumps(dest) if "#" in dest else json.dumps(dest) + ' + (location.search ? "%s" + location.search.slice(1) : "")' % sep
     return """<!doctype html>
 <html lang="it">
 <head>
@@ -334,6 +335,7 @@ def main():
     scrivi_rimando("asporto", pagina_rimando(d, "Asporto", "Ordina da asporto", d["menu"] + "?asporto=1")
                    if d.get("asporto") else None)
     scrivi_rimando("club", pagina_rimando(d, "Club", "Entra nel Club", d["menu"] + "?club=apri"))
+    scrivi_rimando("menu", pagina_rimando(d, "Menu", "Apri il menu", d["menu"]))
     scrivi_rimando("privacy", pagina_privacy(d, testi))
     scrivi_rimando("regalo", pagina_regalo(d, testi) if (d.get("prenotazioni") or {}).get("url") else None)
     # dominio/prenota: il link corto della bio di Instagram (conta come canale instagram)
