@@ -7,7 +7,7 @@ Legge sorgente/dati.json (il ristorante), sorgente/testi.json (le parole, una
 sezione per lingua) e sorgente/pagina.html (lo stampo), e scrive:
 index.html (italiano), en/index.html (inglese), sitemap.xml, robots.txt, CNAME
 e gli indirizzi corti per volantini e social: club/index.html e, se c'è l'asporto,
-asporto/index.html. In più privacy/index.html e regalo/index.html (le campagne).
+asporto/index.html, prenota/index.html. In più privacy/index.html e regalo/index.html (le campagne).
 Per il sito di un altro locale basta cambiare dati.json e testi.json.
 """
 import hashlib, html, json, os, re, shutil
@@ -192,7 +192,9 @@ def costruisci(d, t, lingua):
 # indirizzi corti (dominio/asporto, dominio/club): rimandano subito al menu, in modalità
 # asporto o con l'iscrizione al Club aperta. Si stampano su volantini, bio dei social e
 # scheda Google; gli eventuali ?parametri (es. ?fonte=sacchetto) passano al menu.
+# Se la destinazione ha un'ancora (#prenota) non passano: finirebbero dopo l'ancora.
 def pagina_rimando(d, titolo, testo, dest):
+    vai = json.dumps(dest) if "#" in dest else json.dumps(dest) + ' + (location.search ? "&" + location.search.slice(1) : "")'
     return """<!doctype html>
 <html lang="it">
 <head>
@@ -202,13 +204,13 @@ def pagina_rimando(d, titolo, testo, dest):
   <meta name="robots" content="noindex">
   <meta http-equiv="refresh" content="0; url=%(dest)s">
   <link rel="canonical" href="%(dest)s">
-  <script>location.replace(%(dest_js)s + (location.search ? "&" + location.search.slice(1) : ""));</script>
+  <script>location.replace(%(vai)s);</script>
 </head>
 <body style="margin:0;min-height:100vh;display:grid;place-items:center;background:#1a1210;color:#f3e9dc;font:16px/1.5 system-ui,sans-serif">
   <p><a href="%(dest)s" style="color:#e2b45a">%(testo)s · %(nome)s</a></p>
 </body>
 </html>
-""" % {"nome": esc(d["nome"]), "titolo": esc(titolo), "testo": esc(testo), "dest": esc(dest), "dest_js": json.dumps(dest)}
+""" % {"nome": esc(d["nome"]), "titolo": esc(titolo), "testo": esc(testo), "dest": esc(dest), "vai": vai}
 
 def scrivi_rimando(nome, pagina):
     cartella = os.path.join(RADICE, nome)
@@ -334,6 +336,9 @@ def main():
     scrivi_rimando("club", pagina_rimando(d, "Club", "Entra nel Club", d["menu"] + "?club=apri"))
     scrivi_rimando("privacy", pagina_privacy(d, testi))
     scrivi_rimando("regalo", pagina_regalo(d, testi) if (d.get("prenotazioni") or {}).get("url") else None)
+    # dominio/prenota: il link corto della bio di Instagram (conta come canale instagram)
+    scrivi_rimando("prenota", pagina_rimando(d, "Prenota", "Prenota un tavolo", "/?ref=instagram#prenota")
+                   if (d.get("prenotazioni") or {}).get("url") else None)
 
 if __name__ == "__main__":
     main()
