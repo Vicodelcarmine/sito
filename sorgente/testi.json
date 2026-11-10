@@ -69,6 +69,11 @@
     "vicolo_occhiello": "Dagli stessi titolari",
     "vicolo_titolo_html": "Ti piace la brace? Vieni a trovarci anche al <em>Vicolo</em>",
     "vicolo_testo": "La nostra braceria pizzeria: carne alla brace e pizza cotta a legna.",
+    "ev_occhiello": "31 dicembre",
+    "ev_titolo_html": "Cenone di <em>Capodanno</em>",
+    "ev_testo": "Antipasti di mare e di terra al centro tavola, due primi, sorbetto al limone al prosecco, secondo a scelta tra orata in crosta di patate e controfiletto di manzo al Chianti, tortino caldo al cioccolato e una bottiglia di vino ogni 2 persone. 65 € a persona, vino incluso: il secondo e il vino si scelgono quando prenoti al telefono.",
+    "ev_bottone": "Vedi il menu",
+    "ev_alt": "Locandina del cenone di Capodanno del Vico del Carmine, 31 dicembre, 65 euro a persona vino incluso",
 
     "regalo": {
       "titolo_pagina": "Il tuo regalo",
@@ -268,6 +273,11 @@
     "vicolo_occhiello": "From the same owners",
     "vicolo_titolo_html": "Love the grill? Come and see us at <em>Il Vicolo</em> too",
     "vicolo_testo": "Our steakhouse and pizzeria: meat from the grill and wood-fired pizza.",
+    "ev_occhiello": "31 December",
+    "ev_titolo_html": "New Year's Eve <em>dinner</em>",
+    "ev_testo": "Seafood and countryside starters to share, two pasta courses, lemon and prosecco sorbet, a choice of potato-crusted sea bream or beef sirloin in Chianti sauce, warm chocolate cake and a bottle of wine for every 2 guests. €65 per person, wine included: choose your main course and wine when you book by phone.",
+    "ev_bottone": "See the menu",
+    "ev_alt": "Vico del Carmine New Year's Eve dinner poster, 31 December, 65 euros per person wine included",
 
     "pren": {
       "sera": "The evening",

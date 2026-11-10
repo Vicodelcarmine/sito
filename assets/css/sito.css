@@ -395,6 +395,18 @@ p{ margin:0; }
   .asporto-riquadro{ grid-template-columns:1fr auto; padding:48px 56px; }
 }
 
+/* ---------- evento in home (es. il cenone di Capodanno) ---------- */
+.evento-riquadro{
+  display:grid; gap:26px; align-items:center; padding:26px; border-radius:24px;
+  background:linear-gradient(135deg, rgba(122,31,43,.55), var(--carta) 70%); border:1px solid rgba(230,178,74,.35);
+}
+.evento-foto{ display:block; width:100%; max-width:300px; border-radius:16px; overflow:hidden; box-shadow:var(--ombra); }
+.evento-foto img{ display:block; width:100%; height:auto; aspect-ratio:4/5; object-fit:cover; object-position:top; }
+.evento-riquadro .azioni{ margin-top:22px; }
+@media (min-width:880px){
+  .evento-riquadro{ grid-template-columns:300px 1fr; gap:48px; padding:40px 56px; }
+}
+
 /* ---------- pagina del regalo (regalo/?c=CODICE, assets/js/regalo.js) ---------- */
 .reg-testa{ padding:14px var(--margine); border-bottom:1px solid var(--linea); }
 .reg-testa .marchio{ max-width:var(--larghezza); margin:0 auto; }

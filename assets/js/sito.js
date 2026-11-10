@@ -63,6 +63,13 @@
     setInterval(mostraStato, 60000);
   }
 
+  // ---- l'evento in home sparisce dopo la sua data (anche se la pagina non è stata rigenerata)
+  const evento = document.getElementById("evento");
+  if (evento && evento.dataset.fino) {
+    const oggiFirenze = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Rome" }).format(new Date());
+    if (oggiFirenze > evento.dataset.fino) evento.remove();
+  }
+
   // ---- negli orari, la riga di oggi
   const oggi = adessoFirenze().giorno;
   document.querySelectorAll('.orari tr[data-g="' + oggi + '"]').forEach(function (r) { r.classList.add("oggi"); });

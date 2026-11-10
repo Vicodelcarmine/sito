@@ -10,7 +10,7 @@ e gli indirizzi corti per volantini e social: menu/index.html, club/index.html,
 prenota/index.html e, se c'è l'asporto, asporto/index.html. In più privacy/index.html e regalo/index.html (le campagne).
 Per il sito di un altro locale basta cambiare dati.json e testi.json.
 """
-import hashlib, html, json, os, re, shutil
+import datetime, hashlib, html, json, os, re, shutil
 
 RADICE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LINGUE = ["it", "en"]                       # la prima è quella principale (alla radice)
@@ -148,6 +148,22 @@ def costruisci(d, t, lingua):
                        '<p class="occhiello">%s</p><h2>%s</h2><p class="testo">%s</p>%s</div></div></section>'
                        % (v["vicolo_occhiello"], t["vicolo_titolo_html"], v["vicolo_testo"], dove))
 
+    # evento (es. il cenone di Capodanno): riquadro con la locandina sotto la prima schermata.
+    # Dopo la data "fino" non si genera più, e chi ha la pagina vecchia lo vede sparire (sito.js)
+    v["EVENTO"] = ""
+    ev = d.get("evento") or {}
+    evento_attivo = bool(ev.get("immagine")) and ev.get("fino", "") >= datetime.date.today().isoformat()
+    if evento_attivo:
+        foto = "%sassets/img/eventi/%s.jpg" % (base, esc(ev["immagine"]))
+        v["EVENTO"] = ('<section class="sezione evento" id="evento" data-fino="%s"><div class="contenitore"><div class="evento-riquadro">'
+                       '<a class="evento-foto" href="%s" target="_blank" rel="noopener">'
+                       '<img src="%s" alt="%s" width="1080" height="1920" loading="lazy"></a>'
+                       '<div><p class="occhiello">%s</p><h2>%s</h2><p class="testo">%s</p><div class="azioni">'
+                       '<a class="btn" href="tel:%s">%s%s</a>'
+                       '<a class="btn btn-vuoto" href="%s" target="_blank" rel="noopener">%s%s</a></div></div></div></div></section>'
+                       % (esc(ev["fino"]), foto, foto, v["ev_alt"], v["ev_occhiello"], t["ev_titolo_html"], v["ev_testo"],
+                          esc(d["telefono"]), ICONE["telefono"], v["CHIAMA"], foto, ICONE["libro"], v["ev_bottone"]))
+
     jsonld = {
         "@context": "https://schema.org", "@type": "Restaurant",
         "name": d["nome"], "url": url_it, "image": url_it + "assets/img/og.jpg",
@@ -159,6 +175,16 @@ def costruisci(d, t, lingua):
         "openingHoursSpecification": orari_jsonld(d["orari"]),
         "sameAs": [l for l in d.get("social", {}).values() if l],
     }
+    if evento_attivo:
+        jsonld["event"] = {
+            "@type": "Event", "name": re.sub(r"<[^>]+>", "", t["ev_titolo_html"]), "description": t["ev_testo"],
+            "startDate": ev.get("data") or ev["fino"], "image": url_it + "assets/img/eventi/" + ev["immagine"] + ".jpg",
+            "eventStatus": "https://schema.org/EventScheduled",
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "location": {"@type": "Place", "name": d["nome"], "address": jsonld["address"]},
+            "offers": {"@type": "Offer", "price": ev.get("prezzo", ""), "priceCurrency": "EUR",
+                       "url": url_lingua[lingua] + "#evento"},
+        }
     v["JSONLD"] = json.dumps(jsonld, ensure_ascii=False).replace("</", "<\\/")
 
     sito = {
