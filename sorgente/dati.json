@@ -77,8 +77,8 @@
     "data": "2026-12-31",
     "fino": "2026-12-31",
     "prezzo": "70",
-    "_pagamento": "Link di pagamento Stripe della caparra (25 € a persona). Vuoto = niente tasto, si prenota al telefono.",
-    "pagamento": "https://book.stripe.com/28EcN5g1w8wr8GqdnzdUY00"
+    "_pagamento": "Dove si prenota pagando la caparra (25 € a persona): la pagina del Vico su capodannofirenze.it, così ogni prenotazione online finisce nel loro gestionale. Vuoto = niente tasto, si prenota al telefono.",
+    "pagamento": "https://www.capodannofirenze.it/ristoranti-capodanno-firenze/capodanno-ristorante-vico-del-carmine-firenze.html"
   },
 
   "_credito": "Chi ha fatto il sito: riga piccola in fondo alla pagina. Vuota = non compare.",
