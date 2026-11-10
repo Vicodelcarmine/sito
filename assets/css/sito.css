@@ -403,6 +403,7 @@ p{ margin:0; }
 .evento-foto{ display:block; width:100%; max-width:300px; border-radius:16px; overflow:hidden; box-shadow:var(--ombra); }
 .evento-foto img{ display:block; width:100%; height:auto; aspect-ratio:4/5; object-fit:cover; object-position:top; }
 .evento-riquadro .azioni{ margin-top:22px; }
+.evento-caparra{ margin-top:12px; font-size:.95rem; color:var(--oro-tenue); }
 @media (min-width:880px){
   .evento-riquadro{ grid-template-columns:300px 1fr; gap:48px; padding:40px 56px; }
 }

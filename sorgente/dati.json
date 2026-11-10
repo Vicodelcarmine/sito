@@ -73,10 +73,12 @@
 
   "_evento": "Un evento in home (es. il cenone di Capodanno): locandina in assets/img/eventi/<immagine>.jpg, testi ev_* in testi.json. Dopo la data \"fino\" non compare più. Toglilo (o lascialo vuoto) quando non serve.",
   "evento": {
-    "immagine": "cenone-capodanno-2026",
+    "immagine": "cenone-capodanno-2026-70",
     "data": "2026-12-31",
     "fino": "2026-12-31",
-    "prezzo": "65"
+    "prezzo": "70",
+    "_pagamento": "Link di pagamento Stripe della caparra (25 € a persona). Vuoto = niente tasto, si prenota al telefono.",
+    "pagamento": ""
   },
 
   "_credito": "Chi ha fatto il sito: riga piccola in fondo alla pagina. Vuota = non compare.",

@@ -155,14 +155,22 @@ def costruisci(d, t, lingua):
     evento_attivo = bool(ev.get("immagine")) and ev.get("fino", "") >= datetime.date.today().isoformat()
     if evento_attivo:
         foto = "%sassets/img/eventi/%s.jpg" % (base, esc(ev["immagine"]))
+        # con il link di pagamento (Stripe) il tasto principale è la caparra, il telefono resta accanto
+        if ev.get("pagamento"):
+            caparra = '<p class="testo evento-caparra">%s</p>' % v["ev_caparra"]
+            tasti = ('<a class="btn" href="%s" target="_blank" rel="noopener">%s%s</a>'
+                     '<a class="btn btn-vuoto" href="tel:%s">%s%s</a>'
+                     % (esc(ev["pagamento"]), ICONE["calendario"], v["ev_paga"], esc(d["telefono"]), ICONE["telefono"], v["CHIAMA"]))
+        else:
+            caparra = ""
+            tasti = '<a class="btn" href="tel:%s">%s%s</a>' % (esc(d["telefono"]), ICONE["telefono"], v["CHIAMA"])
         v["EVENTO"] = ('<section class="sezione evento" id="evento" data-fino="%s"><div class="contenitore"><div class="evento-riquadro">'
                        '<a class="evento-foto" href="%s" target="_blank" rel="noopener">'
                        '<img src="%s" alt="%s" width="1080" height="1920" loading="lazy"></a>'
-                       '<div><p class="occhiello">%s</p><h2>%s</h2><p class="testo">%s</p><div class="azioni">'
-                       '<a class="btn" href="tel:%s">%s%s</a>'
+                       '<div><p class="occhiello">%s</p><h2>%s</h2><p class="testo">%s</p>%s<div class="azioni">%s'
                        '<a class="btn btn-vuoto" href="%s" target="_blank" rel="noopener">%s%s</a></div></div></div></div></section>'
                        % (esc(ev["fino"]), foto, foto, v["ev_alt"], v["ev_occhiello"], t["ev_titolo_html"], v["ev_testo"],
-                          esc(d["telefono"]), ICONE["telefono"], v["CHIAMA"], foto, ICONE["libro"], v["ev_bottone"]))
+                          caparra, tasti, foto, ICONE["libro"], v["ev_bottone"]))
 
     jsonld = {
         "@context": "https://schema.org", "@type": "Restaurant",

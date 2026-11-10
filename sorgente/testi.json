@@ -71,9 +71,11 @@
     "vicolo_testo": "La nostra braceria pizzeria: carne alla brace e pizza cotta a legna.",
     "ev_occhiello": "31 dicembre",
     "ev_titolo_html": "Cenone di <em>Capodanno</em>",
-    "ev_testo": "Antipasti di mare e di terra al centro tavola, due primi, sorbetto al limone al prosecco, secondo a scelta tra orata in crosta di patate e controfiletto di manzo al Chianti, tortino caldo al cioccolato e una bottiglia di vino ogni 2 persone. 65 € a persona, vino incluso: il secondo e il vino si scelgono quando prenoti al telefono.",
+    "ev_testo": "Antipasti di mare e di terra al centro tavola, due primi, sorbetto al limone al prosecco, secondo a scelta tra orata in crosta di patate e controfiletto di manzo al Chianti, tortino caldo al cioccolato e una bottiglia di vino ogni 2 persone. 70 € a persona con vino, acqua e flûte per il brindisi: il secondo e il vino si scelgono quando prenoti.",
+    "ev_caparra": "Si prenota con una caparra di 25 € a persona, il resto (45 €) al locale. Disdetta gratuita con rimborso fino al 24 dicembre.",
+    "ev_paga": "Prenota e paga la caparra",
     "ev_bottone": "Vedi il menu",
-    "ev_alt": "Locandina del cenone di Capodanno del Vico del Carmine, 31 dicembre, 65 euro a persona vino incluso",
+    "ev_alt": "Locandina del cenone di Capodanno del Vico del Carmine, 31 dicembre, 70 euro a persona vino incluso",
 
     "regalo": {
       "titolo_pagina": "Il tuo regalo",
@@ -275,9 +277,11 @@
     "vicolo_testo": "Our steakhouse and pizzeria: meat from the grill and wood-fired pizza.",
     "ev_occhiello": "31 December",
     "ev_titolo_html": "New Year's Eve <em>dinner</em>",
-    "ev_testo": "Seafood and countryside starters to share, two pasta courses, lemon and prosecco sorbet, a choice of potato-crusted sea bream or beef sirloin in Chianti sauce, warm chocolate cake and a bottle of wine for every 2 guests. €65 per person, wine included: choose your main course and wine when you book by phone.",
+    "ev_testo": "Seafood and countryside starters to share, two pasta courses, lemon and prosecco sorbet, a choice of potato-crusted sea bream or beef sirloin in Chianti sauce, warm chocolate cake and a bottle of wine for every 2 guests. €70 per person with wine, water and a glass of bubbly for the toast: choose your main course and wine when you book.",
+    "ev_caparra": "Book with a €25 deposit per person and pay the rest (€45) at the restaurant. Free cancellation with a full refund until 24 December.",
+    "ev_paga": "Book and pay the deposit",
     "ev_bottone": "See the menu",
-    "ev_alt": "Vico del Carmine New Year's Eve dinner poster, 31 December, 65 euros per person wine included",
+    "ev_alt": "Vico del Carmine New Year's Eve dinner poster, 31 December, 70 euros per person wine included",
 
     "pren": {
       "sera": "The evening",
