@@ -12,6 +12,7 @@
   const S = window.SITO || {};
   const P = S.pren || {};
   const CFG = S.prenota || {};
+  const SOLO_TEL = S.soloTelefono || [];   // sere chiuse al sito ma non al locale (es. Capodanno): "chiama"
   const app = document.getElementById("pren-app");
   if (!app || !CFG.url) return;
 
@@ -299,12 +300,12 @@
         const nome = g.sera === oggiFirenze() ? P.oggi : g.sera === piuGiorni(oggiFirenze(), 1) ? P.domani : S.giorni[giornoSett(g.sera)].slice(0, 3);
         return '<button type="button" class="pren-giorno' + (g.sera === sera ? " on" : "") + '" data-sera="' + g.sera + '"' +
           (ok ? "" : " disabled") + ' aria-pressed="' + (g.sera === sera) + '">' +
-          "<span>" + esc(nome) + "</span><b>" + p[2] + "</b><span>" + esc(ok ? P.mesi[p[1] - 1] : g.chiuso ? P.chiuso : g.sera === oggiFirenze() ? P.solo_telefono : P.pieno) + "</span></button>";
+          "<span>" + esc(nome) + "</span><b>" + p[2] + "</b><span>" + esc(ok ? P.mesi[p[1] - 1] : g.chiuso ? (SOLO_TEL.indexOf(g.sera) >= 0 ? P.solo_telefono : P.chiuso) : g.sera === oggiFirenze() ? P.solo_telefono : P.pieno) + "</span></button>";
       }).join("") + "</div>" +
       '<p class="pren-passo">' + esc(P.turno) + "</p>" +
       '<div class="pren-turni">' + giornoScelto().turni.map(function (x, i, tutti) {
         // oggi un orario senza posti online di solito è solo "troppo tardi": al telefono si può ancora
-        const stato = x.liberi < 1 ? (giornoScelto().chiuso ? P.chiuso : sera === oggiFirenze() ? P.solo_telefono : P.pieno)
+        const stato = x.liberi < 1 ? (giornoScelto().chiuso ? (SOLO_TEL.indexOf(sera) >= 0 ? P.solo_telefono : P.chiuso) : sera === oggiFirenze() ? P.solo_telefono : P.pieno)
           : x.liberi < disp.maxPersone ? P.ultimi : "";
         // ogni turno comincia su una riga nuova: si vede che sono due momenti della sera
         const aCapo = i > 0 && x.fascia !== tutti[i - 1].fascia;

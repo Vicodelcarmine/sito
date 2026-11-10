@@ -198,6 +198,9 @@ def costruisci(d, t, lingua):
         sito.update({"lingua": lingua, "nome": d["nome"], "indirizzo": d["indirizzo"] + ", " + d["citta"],
                      "telefono": d["telefono"], "telefonoVisto": d["telefono_visto"],
                      "prenota": d["prenotazioni"], "pren": t["pren"]})
+        # la sera dell'evento si prenota solo al telefono: se è tra le sere chiuse, il sito scrive "chiama", non "chiuso"
+        if evento_attivo and ev.get("data"):
+            sito["soloTelefono"] = [ev["data"]]
         v["PRENOTA_JS"] = '<script src="%sassets/js/prenota.js?v=%s" defer></script>' % (base, impronta("assets/js/prenota.js"))
     v["SITO_JSON"] = json.dumps(sito, ensure_ascii=False).replace("</", "<\\/")
 
