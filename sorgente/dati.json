@@ -78,7 +78,7 @@
     "fino": "2026-12-31",
     "prezzo": "70",
     "_pagamento": "Link di pagamento Stripe della caparra (25 € a persona). Vuoto = niente tasto, si prenota al telefono.",
-    "pagamento": ""
+    "pagamento": "https://book.stripe.com/28EcN5g1w8wr8GqdnzdUY00"
   },
 
   "_credito": "Chi ha fatto il sito: riga piccola in fondo alla pagina. Vuota = non compare.",
