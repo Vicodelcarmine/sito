@@ -127,12 +127,15 @@ def costruisci(d, t, lingua):
             (" · " + esc(t["piede_piva"]) + " " + esc(cr["partita_iva"])) if cr.get("partita_iva") else "")
 
     # asporto: una sezione con il tasto che apre il menu in modalità asporto
-    v["ASPORTO"] = v["NAV_ASPORTO"] = ""
+    # in azzurro, come il tasto "Asporto" nella barra in basso del telefono
+    v["ASPORTO"] = v["NAV_ASPORTO"] = v["BARRA_ASPORTO"] = ""
     if d.get("asporto"):
         v["NAV_ASPORTO"] = '<a href="#asporto">%s</a>' % v["nav_asporto"]
+        v["BARRA_ASPORTO"] = ('<a class="asporto" href="%s?asporto=1">%s<span>%s</span></a>'
+                              % (esc(d["menu"]), ICONE["borsa"], v["nav_asporto"]))
         v["ASPORTO"] = ('<section class="sezione asporto" id="asporto"><div class="contenitore"><div class="asporto-riquadro">'
                         '<div><p class="occhiello">%s</p><h2>%s</h2><p class="testo">%s</p></div>'
-                        '<a class="btn" href="%s?asporto=1">%s%s</a></div></div></section>'
+                        '<a class="btn btn-azzurro" href="%s?asporto=1">%s%s</a></div></div></section>'
                         % (v["asp_occhiello"], t["asp_titolo_html"], v["asp_testo"], esc(d["menu"]), ICONE["borsa"], v["asp_bottone"]))
 
     vic = d.get("vicolo") or {}
